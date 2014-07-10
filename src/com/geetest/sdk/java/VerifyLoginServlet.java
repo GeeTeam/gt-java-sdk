@@ -16,7 +16,10 @@ public class VerifyLoginServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		String privateKey = "76ea9ed00c6abadddf89c6a6d7db35b9";
+		
+		System.out.println("succeed in post!");
+		
+		String privateKey = "a40fd3b0d712165c5d13e6f747e948d4";
 		GeetestLib geetest = new GeetestLib(privateKey);
 		boolean result = geetest.validate(
 				request.getParameter("geetest_challenge"),
