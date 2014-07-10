@@ -16,9 +16,9 @@ public class VerifyLoginServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		
-		System.out.println("succeed in post!");
-		
+
+		System.out.println("succeed in GtSdk post!");
+
 		String privateKey = "a40fd3b0d712165c5d13e6f747e948d4";
 		GeetestLib geetest = new GeetestLib(privateKey);
 		boolean result = geetest.validate(
