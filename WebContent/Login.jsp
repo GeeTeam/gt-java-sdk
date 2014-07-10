@@ -51,7 +51,7 @@ body {
 			</div>
 			<div class="row">
 				<script type="text/javascript"
-					src="http://api.geetest.com/get.php?gt=a40fd3b0d712165c5d13e6f747e948d4"></script>
+					src="http://api.geetest.com/get.php?gt=a40fd3b0d712165c5d13e6f747e948d4&product=embed"></script>
 			</div>
 			<div class="row">
 				<input type="submit" value="登录" />
