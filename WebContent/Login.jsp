@@ -49,10 +49,31 @@ body {
 				<label for="passwd">密码</label> <input type="password" id="passwd"
 					name="passwd" value="gggggggg" />
 			</div>
+
+			<%--Start  Code--%>
 			<div class="row">
+
+				<jsp:useBean id="geetestSdk" class="com.geetest.sdk.java.GeetestLib"
+					scope="request" />
+
+				<%
+					if (((geetestSdk.getGtServerStatus()) != 1)) {
+				%>
+				<h1>请插入自己服务器上的备选验证码</h1>
+
+				<%
+					} else {
+				%>
 				<script type="text/javascript"
 					src="http://api.geetest.com/get.php?gt=a40fd3b0d712165c5d13e6f747e948d4&product=embed"></script>
+				<%
+					}
+				%>
+
 			</div>
+			<%--End  Code--%>
+
+
 			<div class="row">
 				<input type="submit" value="登录" />
 			</div>

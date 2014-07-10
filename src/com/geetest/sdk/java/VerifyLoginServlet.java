@@ -17,22 +17,24 @@ public class VerifyLoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		System.out.println("succeed in GtSdk post!");
-		
 		// TODO add your own privateKey Here
 		String privateKey = "0f1a37e33c9ed10dd2e133fe2ae9c459";
-
 		GeetestLib geetest = new GeetestLib(privateKey);
-		boolean result = geetest.validate(
-				request.getParameter("geetest_challenge"),
-				request.getParameter("geetest_validate"),
-				request.getParameter("geetest_seccode"));
-		if (result) {
-			// TODO
-			System.out.println("Yes!");
+
+		if (geetest.resquestIsLegal(request)) {
+
+			boolean gtResult = geetest.validateRequest(request);
+			if (gtResult) {
+				// TODO handle the pass result
+				System.out.println("Yes!");
+			} else {
+				// TODO handle the fail result
+				System.out.println("No!");
+			}
 		} else {
-			// TODO
-			System.out.println("No!");
+			// TODO use you own system
+			System.out.println("Geetest error~!");
 		}
+
 	}
 }
