@@ -18,16 +18,20 @@ public class VerifyLoginServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 
 		System.out.println("succeed in GtSdk post!");
+		
+		// TODO add your own privateKey Here
+		String privateKey = "0f1a37e33c9ed10dd2e133fe2ae9c459";
 
-		String privateKey = "a40fd3b0d712165c5d13e6f747e948d4";
 		GeetestLib geetest = new GeetestLib(privateKey);
 		boolean result = geetest.validate(
 				request.getParameter("geetest_challenge"),
 				request.getParameter("geetest_validate"),
 				request.getParameter("geetest_seccode"));
 		if (result) {
+			// TODO
 			System.out.println("Yes!");
 		} else {
+			// TODO
 			System.out.println("No!");
 		}
 	}
