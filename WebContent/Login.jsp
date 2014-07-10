@@ -22,7 +22,7 @@
 	-->
 <style>
 body {
-	background-color: #9e9;
+	background-color: #FEFEFE;
 }
 
 .wrap {
