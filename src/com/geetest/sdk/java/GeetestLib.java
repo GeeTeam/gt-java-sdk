@@ -41,6 +41,18 @@ public class GeetestLib {
 	private String privateKey = "";
 
 	/**
+	 * 获取版本编号
+	 * 
+	 * @author Zheng
+	 * @email dreamzsm@gmail.com
+	 * @time 2014年7月11日 上午11:07:11
+	 * @return
+	 */
+	public String getVersionInfo() {
+		return "GtJavaSdk_" + "Vc" + verCode + "Vn" + verName;
+	}
+
+	/**
 	 * 一个无参构造函数
 	 */
 	public GeetestLib() {
@@ -75,6 +87,7 @@ public class GeetestLib {
 		try {
 			final String GET_URL = "http://api.geetest.com:80/check_status.php";
 			if (readContentFromGet(GET_URL).equals("ok")) {
+				System.out.println("is Ok");
 				return 1;
 			} else {
 				return 0;
@@ -100,6 +113,9 @@ public class GeetestLib {
 		HttpURLConnection connection = (HttpURLConnection) getUrl
 				.openConnection();
 
+		connection.setConnectTimeout(1000);// 设置连接主机超时（单位：毫秒）
+		connection.setReadTimeout(1000);// 设置从主机读取数据超时（单位：毫秒）
+
 		// 建立与服务器的连接，并未发送数据
 
 		connection.connect();
@@ -115,8 +131,6 @@ public class GeetestLib {
 		inStream.close();
 		connection.disconnect();// 断开连接
 
-		System.out.println(sBuffer.toString());
-
 		return sBuffer.toString();
 	}
 
@@ -128,9 +142,11 @@ public class GeetestLib {
 	 * @return
 	 */
 	private boolean objIsEmpty(Object gtObj) {
-		if (gtObj != null && gtObj.toString().trim().length() > 0) {
+		if (gtObj != null) {
 			return false;
 		}
+		// && gtObj.toString().trim().length() > 0
+
 		return true;
 	}
 
@@ -155,7 +171,7 @@ public class GeetestLib {
 			return false;
 		}
 
-		return false;
+		return true;
 	}
 
 	/**
