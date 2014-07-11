@@ -1,2 +1,2 @@
-Java SDKµÄÑÝÊ¾¡£
+Java SDK Demo¡£
 201479_173126
