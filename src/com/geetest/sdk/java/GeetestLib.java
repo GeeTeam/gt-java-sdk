@@ -28,12 +28,12 @@ public class GeetestLib {
 	/**
 	 * SDK版本编号
 	 */
-	private final int verCode = 6;
+	private final int verCode = 7;
 
 	/**
 	 * SDK版本名称
 	 */
-	private final String verName = "2.0";
+	private final String verName = "2.1";
 
 	/**
 	 * 私钥
