@@ -21,47 +21,38 @@ public class VerifyLoginServlet extends HttpServlet {
 		// TODO add your own privateKey Here
 		String privateKey = "0f1a37e33c9ed10dd2e133fe2ae9c459";
 		GeetestLib geetest = new GeetestLib(privateKey);
-		boolean gtResult = false;
-
+		String gtResult = "fail";
+		
 		if (geetest.resquestIsLegal(request)) {
-			gtResult = geetest.validateRequest(request);
+			gtResult = geetest.enhencedValidateRequest(request);
 		} else {
-			// TODO use you own system
-			gtResult = false;
+			// TODO use you own system when geetest-server is down:failback
+			gtResult = "fail";
 
 		}
 
-		if (gtResult) {
-			// TODO handle the pass result
-			System.out.println("Yes!");
+		if (gtResult.equals("success")) {
+			// TODO handle the Success result
 
 			response.setContentType("text/html; charset=UTF-8");
 			PrintWriter out = response.getWriter();
-			out.println("<html>");
-			out.println("<head>");
-			out.println("<title>极验验证</title>");
-			out.println("</head>");
-			out.println("<body>");
-			out.println("<h1>验证通过</h1>");
-			out.println("<h4>" + "当前版本：" + geetest.getVersionInfo() + "</h4>");
-			out.println("</body>");
-			out.println("</html>");
+			out.println("<h1>" + "success!  with SDK version:   "
+					+ geetest.getVersionInfo() + "</h1>");
 
-		} else {
-			// TODO handle the fail result
-			System.out.println("No!");
+		} else if (gtResult.equals("forbidden")) {
+			// TODO handle the Forbidden result
 
 			response.setContentType("text/html; charset=UTF-8");
 			PrintWriter out = response.getWriter();
-			out.println("<html>");
-			out.println("<head>");
-			out.println("<title>极验验证</title>");
-			out.println("</head>");
-			out.println("<body>");
-			out.println("<h1>验证未通过</h1>");
-			out.println("<h4>" + "当前版本：" + geetest.getVersionInfo() + "</h4>");
-			out.println("</body>");
-			out.println("</html>");
+			out.println("<h1>" + "forbidden!  with SDK version:   " 
+					+ geetest.getVersionInfo() + "</h1>");
+		}
+		else{
+			// TODO handle the Fail result
+			response.setContentType("text/html; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.println("<h1>" + "fail!  with SDK version:"
+					+ geetest.getVersionInfo() + "</h1>");
 		}
 
 	}

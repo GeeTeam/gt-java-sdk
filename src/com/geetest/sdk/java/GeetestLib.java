@@ -28,12 +28,12 @@ public class GeetestLib {
 	/**
 	 * SDK版本编号
 	 */
-	private final int verCode = 7;
+	private final int verCode = 8;
 
 	/**
 	 * SDK版本名称
 	 */
-	private final String verName = "2.1";
+	private final String verName = "14.12.01";
 
 	/**
 	 * 私钥
@@ -85,11 +85,11 @@ public class GeetestLib {
 	public int getGtServerStatus() {
 
 		try {
-			final String GET_URL = "http://api.geetest.com:80/check_status.php";
+			final String GET_URL = "http://api.geetest.com/check_status.php";
 			if (readContentFromGet(GET_URL).equals("ok")) {
-				System.out.println("is Ok");
 				return 1;
 			} else {
+				System.out.println("gServer is Down");
 				return 0;
 			}
 		} catch (Exception e) {
@@ -175,7 +175,7 @@ public class GeetestLib {
 	}
 
 	/**
-	 * 检验验证请求 传入的参数为request
+	 * 检验验证请求 传入的参数为request--vCode 8之后不再更新,不推荐使用
 	 * 
 	 * @time 2014年7月10日 下午6:34:55
 	 * @param request
@@ -191,7 +191,61 @@ public class GeetestLib {
 		return gtResult;
 	}
 
-	public boolean validate(String challenge, String validate, String seccode) {
+	/**
+	 * 增强版的验证信息,提供了更多的验证返回结果信息，以让客户服务器端有不同的数据处理。
+	 * 
+	 * @param challenge
+	 * @param validate
+	 * @param seccode
+	 * @return
+	 */
+	public String enhencedValidateRequest(HttpServletRequest request) {
+
+		String challenge = request.getParameter("geetest_challenge");
+		String validate = request.getParameter("geetest_validate");
+		String seccode = request.getParameter("geetest_seccode");
+
+		String host = "api.geetest.com";
+		String path = "/validate.php";
+		int port = 80;
+		String query = "seccode=" + seccode;
+		String response = "";
+
+		try {
+			if (validate.length() <= 0) {
+				return "fail";
+			}
+
+			if (!checkResultByPrivate(challenge, validate)) {
+				return "fail";
+			}
+
+			response = postValidate(host, path, query, port);
+			gtlog("response: " + response);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		gtlog("md5: " + md5Encode(seccode));
+
+		if (response.equals(md5Encode(seccode))) {
+			return "success";
+		} else {
+			return response;
+		}
+
+	}
+
+	/**
+	 * the old api use before version code 8(not include)
+	 * 
+	 * @param challenge
+	 * @param validate
+	 * @param seccode
+	 * @return
+	 * @time 2014122_171529 by zheng
+	 */
+	private boolean validate(String challenge, String validate, String seccode) {
 		String host = "api.geetest.com";
 		String path = "/validate.php";
 		int port = 80;
@@ -200,15 +254,30 @@ public class GeetestLib {
 			String response = "";
 			try {
 				response = postValidate(host, path, query, port);
+				gtlog(response);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+
+			gtlog("md5: " + md5Encode(seccode));
+
 			if (response.equals(md5Encode(seccode))) {
 				return true;
 			}
 		}
 		return false;
 
+	}
+
+	/**
+	 * Print out log message Use to Debug
+	 * 
+	 * @time 2014122_151829 by zheng
+	 * 
+	 * @param message
+	 */
+	public void gtlog(String message) {
+		// System.out.println("logger: " + message);
 	}
 
 	private boolean checkResultByPrivate(String origin, String validate) {
