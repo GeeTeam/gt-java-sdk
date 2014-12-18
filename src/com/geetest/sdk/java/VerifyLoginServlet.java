@@ -17,7 +17,8 @@ public class VerifyLoginServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-
+		
+		
 		// TODO add your own privateKey Here
 		String privateKey = "0f1a37e33c9ed10dd2e133fe2ae9c459";
 		GeetestLib geetest = new GeetestLib(privateKey);
@@ -30,6 +31,8 @@ public class VerifyLoginServlet extends HttpServlet {
 			gtResult = "fail";
 
 		}
+		
+		
 
 		if (gtResult.equals("success")) {
 			// TODO handle the Success result

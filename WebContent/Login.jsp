@@ -77,6 +77,34 @@ body {
 			<div class="row">
 				<input type="submit" value="登录" />
 			</div>
+			<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+
+			<!-- 			ajax post demo -->
+			<script type="text/javascript">
+				function gt_custom_ajax(result, selector, message) {
+
+					console.log(result);
+
+					var challenge = selector(".geetest_challenge").value;
+					var validate = selector(".geetest_validate").value;
+					var seccode = selector(".geetest_seccode").value;
+					$.ajax({
+						url : "VerifyLoginServlet",
+						type : "post",
+						data : {
+							geetest_challenge : challenge,
+							geetest_validate : validate,
+							geetest_seccode : seccode
+						},
+						success : function() {
+						}
+					})
+
+				}
+			</script>
+
+
+
 		</form>
 	</div>
 </body>
