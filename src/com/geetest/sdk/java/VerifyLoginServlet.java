@@ -26,6 +26,7 @@ public class VerifyLoginServlet extends HttpServlet {
 		
 		if (geetest.resquestIsLegal(request)) {
 			gtResult = geetest.enhencedValidateRequest(request);
+			System.out.println(gtResult);
 		} else {
 			// TODO use you own system when geetest-server is down:failback
 			gtResult = "fail";
