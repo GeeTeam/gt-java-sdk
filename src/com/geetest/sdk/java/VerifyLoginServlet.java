@@ -19,9 +19,15 @@ public class VerifyLoginServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		
 		
+		
+		
 		// TODO add your own privateKey Here
 		String privateKey = "0f1a37e33c9ed10dd2e133fe2ae9c459";
 		GeetestLib geetest = new GeetestLib(privateKey);
+		String random_channlege = geetest.generateRandId();
+		
+		System.out.println(random_channlege);
+		
 		String gtResult = "fail";
 		
 		if (geetest.resquestIsLegal(request)) {

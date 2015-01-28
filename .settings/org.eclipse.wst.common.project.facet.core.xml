@@ -3,7 +3,7 @@
   <fixed facet="wst.jsdt.web"/>
   <fixed facet="java"/>
   <fixed facet="jst.web"/>
-  <installed facet="java" version="1.3"/>
   <installed facet="jst.web" version="2.2"/>
   <installed facet="wst.jsdt.web" version="1.0"/>
+  <installed facet="java" version="1.7"/>
 </faceted-project>

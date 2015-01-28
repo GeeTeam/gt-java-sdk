@@ -1,4 +1,4 @@
-package com.geetest.sdk.java;
+﻿package com.geetest.sdk.java;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -14,6 +14,9 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -33,7 +36,7 @@ public class GeetestLib {
 	/**
 	 * SDK版本名称
 	 */
-	private final String verName = "14.12.01";
+	private final String verName = "15.1.28.1";
 
 	/**
 	 * 私钥
@@ -49,7 +52,7 @@ public class GeetestLib {
 	 * @return
 	 */
 	public String getVersionInfo() {
-		return "GtJavaSdk_" + "Vc" + verCode + "Vn" + verName;
+		return verName;
 	}
 
 	/**
@@ -96,6 +99,59 @@ public class GeetestLib {
 			e.printStackTrace();
 		}
 		return 0;
+	}
+
+	/**
+	 * 生成随机数id
+	 * @return
+	 */
+	public String generateRandId(){
+	    String string = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	    String ti = System.currentTimeMillis()+"";
+	    String sstr = shuffleForSortingString(string);
+	    String rand_num_str =(int)(Math.random()*100000)+"";//[0,99999]
+	    String res =  ti + sstr + rand_num_str;
+	    
+	    String md5_hex_res = toHexString(md5Encode(res));
+	    		
+	    return md5_hex_res;
+	}
+
+	/**
+	 * Convert a common String to Hex String
+	 * @param s
+	 * @return
+	 */
+	private static String toHexString(String s) {
+		String str = "";
+		for (int i = 0; i < s.length(); i++) {
+			int ch = (int) s.charAt(i);
+			String s4 = Integer.toHexString(ch);
+			str = str + s4;
+		}
+		return str;// 0x表示十六进制
+	}
+
+	private String shuffleForSortingString(String s) {
+		char[] c = s.toCharArray();
+		List<Character> lst = new ArrayList<Character>();
+		for (int i = 0; i < c.length; i++) {
+			lst.add(c[i]);
+		}
+
+		System.out.println(lst);
+
+		Collections.shuffle(lst);
+
+		System.out.println(lst);
+
+		String resultStr = "";
+		for (int i = 0; i < lst.size(); i++) {
+			resultStr += lst.get(i);
+		}
+
+		System.out.println(resultStr);
+		return resultStr;
 	}
 
 	/**
