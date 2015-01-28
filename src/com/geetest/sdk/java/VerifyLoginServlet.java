@@ -21,12 +21,11 @@ public class VerifyLoginServlet extends HttpServlet {
 		
 		
 		
-		// TODO add your own privateKey Here
+		// TODO add your own catpcha_id/privateKey Here
+		String catpcha_id = "a40fd3b0d712165c5d13e6f747e948d4";
 		String privateKey = "0f1a37e33c9ed10dd2e133fe2ae9c459";
-		GeetestLib geetest = new GeetestLib(privateKey);
-		String random_channlege = geetest.generateRandId();
 		
-		System.out.println(random_channlege);
+		GeetestLib geetest = new GeetestLib(privateKey,catpcha_id);
 		
 		String gtResult = "fail";
 		

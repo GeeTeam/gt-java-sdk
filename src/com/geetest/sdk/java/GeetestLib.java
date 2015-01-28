@@ -44,6 +44,11 @@ public class GeetestLib {
 	private String privateKey = "";
 
 	/**
+	 * 公钥
+	 */
+	private String captcha_id = "";
+
+	/**
 	 * 获取版本编号
 	 * 
 	 * @author Zheng
@@ -53,6 +58,10 @@ public class GeetestLib {
 	 */
 	public String getVersionInfo() {
 		return verName;
+	}
+
+	public void setCaptcha_id(String captcha_id) {
+		this.captcha_id = captcha_id;
 	}
 
 	/**
@@ -67,6 +76,11 @@ public class GeetestLib {
 
 	public GeetestLib(String privateKey) {
 		this.privateKey = privateKey;
+	}
+
+	public GeetestLib(String privateKey, String captcha_id) {
+		this.privateKey = privateKey;
+		this.captcha_id = captcha_id;
 	}
 
 	public int getVerCode() {
@@ -102,34 +116,54 @@ public class GeetestLib {
 	}
 
 	/**
-	 * 生成随机数id
+	 * generate a random num
+	 * 
 	 * @return
 	 */
-	public String generateRandId(){
-	    String string = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	    String ti = System.currentTimeMillis()+"";
-	    String sstr = shuffleForSortingString(string);
-	    String rand_num_str =(int)(Math.random()*100000)+"";//[0,99999]
-	    String res =  ti + sstr + rand_num_str;
-	    
-	    String md5_hex_res = toHexString(md5Encode(res));
-	    		
-	    return md5_hex_res;
+	public int getRandomNum() {
+
+		int rand_num = (int) (Math.random() * 100);
+		// System.out.print(rand_num);
+		return rand_num;
 	}
 
 	/**
-	 * Convert a common String to Hex String
-	 * @param s
+	 * Register the challenge
+	 * 
 	 * @return
 	 */
-	private static String toHexString(String s) {
-		String str = "";
-		for (int i = 0; i < s.length(); i++) {
-			int ch = (int) s.charAt(i);
-			String s4 = Integer.toHexString(ch);
-			str = str + s4;
+	public int registerChallenge() {
+		try {
+			String GET_URL = "http://api.geetest.com/register.php?gt="
+					+ this.captcha_id + "&challenge=" + this.generateRandId();
+			// System.out.print(GET_URL);
+			if (readContentFromGet(GET_URL).equals("ok")) {
+				return 1;
+			} else {
+				System.out.println("gServer register challenge failed");
+				return 0;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		return str;// 0x表示十六进制
+		return 0;
+	}
+
+	/**
+	 * 生成随机数id
+	 * 
+	 * @return
+	 */
+	public String generateRandId() {
+		String string = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		String ti = System.currentTimeMillis() + "";
+		String sstr = shuffleForSortingString(string);
+		String rand_num_str = (int) (Math.random() * 100000) + "";// [0,99999]
+		String res = ti + sstr + rand_num_str;
+
+		String md5_hex_res = md5Encode(res);
+
+		return md5_hex_res;
 	}
 
 	private String shuffleForSortingString(String s) {
@@ -139,18 +173,18 @@ public class GeetestLib {
 			lst.add(c[i]);
 		}
 
-		System.out.println(lst);
+		// System.out.println(lst);
 
 		Collections.shuffle(lst);
 
-		System.out.println(lst);
+		// System.out.println(lst);
 
 		String resultStr = "";
 		for (int i = 0; i < lst.size(); i++) {
 			resultStr += lst.get(i);
 		}
 
-		System.out.println(resultStr);
+		// System.out.println(resultStr);
 		return resultStr;
 	}
 
