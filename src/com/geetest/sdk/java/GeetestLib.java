@@ -134,13 +134,13 @@ public class GeetestLib {
 	 * 
 	 * @return
 	 */
-	public int registerChallenge(String captcha_id) {
+	public int registerChallenge(String captcha_id, String challenge_id) {
 		try {
 			String GET_URL = api_url + "register.php?gt=" + captcha_id
-					+ "&challenge=" + this.generateRandId();
+					+ "&challenge=" + challenge_id;
 			// System.out.print(GET_URL);
 			String result_str = readContentFromGet(GET_URL);
-			// System.out.println(result_str);
+			 System.out.println(result_str);
 			if (result_str.equals("ok")) {
 				return 1;
 			} else {
