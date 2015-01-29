@@ -38,6 +38,8 @@ public class GeetestLib {
 	 */
 	private final String verName = "15.1.28.1";
 
+	private final String api_url = "http://api.geetest.com/";
+
 	/**
 	 * 私钥
 	 */
@@ -46,7 +48,7 @@ public class GeetestLib {
 	/**
 	 * 公钥
 	 */
-	private String captcha_id = "";
+	// private String captcha_id = "";
 
 	/**
 	 * 获取版本编号
@@ -60,9 +62,9 @@ public class GeetestLib {
 		return verName;
 	}
 
-	public void setCaptcha_id(String captcha_id) {
-		this.captcha_id = captcha_id;
-	}
+	// public void setCaptcha_id(String captcha_id) {
+	// this.captcha_id = captcha_id;
+	// }
 
 	/**
 	 * 一个无参构造函数
@@ -78,10 +80,10 @@ public class GeetestLib {
 		this.privateKey = privateKey;
 	}
 
-	public GeetestLib(String privateKey, String captcha_id) {
-		this.privateKey = privateKey;
-		this.captcha_id = captcha_id;
-	}
+	// public GeetestLib(String privateKey, String captcha_id) {
+	// this.privateKey = privateKey;
+	// this.captcha_id = captcha_id;
+	// }
 
 	public int getVerCode() {
 		return verCode;
@@ -102,7 +104,7 @@ public class GeetestLib {
 	public int getGtServerStatus() {
 
 		try {
-			final String GET_URL = "http://api.geetest.com/check_status.php";
+			final String GET_URL = api_url + "check_status.php";
 			if (readContentFromGet(GET_URL).equals("ok")) {
 				return 1;
 			} else {
@@ -132,12 +134,14 @@ public class GeetestLib {
 	 * 
 	 * @return
 	 */
-	public int registerChallenge() {
+	public int registerChallenge(String captcha_id) {
 		try {
-			String GET_URL = "http://api.geetest.com/register.php?gt="
-					+ this.captcha_id + "&challenge=" + this.generateRandId();
+			String GET_URL = api_url + "register.php?gt=" + captcha_id
+					+ "&challenge=" + this.generateRandId();
 			// System.out.print(GET_URL);
-			if (readContentFromGet(GET_URL).equals("ok")) {
+			String result_str = readContentFromGet(GET_URL);
+			// System.out.println(result_str);
+			if (result_str.equals("ok")) {
 				return 1;
 			} else {
 				System.out.println("gServer register challenge failed");
