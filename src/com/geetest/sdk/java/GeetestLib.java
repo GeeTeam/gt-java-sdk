@@ -38,7 +38,7 @@ public class GeetestLib {
 	 */
 	private final String verName = "15.1.28.1";
 
-	private final String api_url = "http://api.geetest.com/";
+	private final String api_url = "http://api.geetest.com";
 
 	/**
 	 * 私钥
@@ -48,7 +48,17 @@ public class GeetestLib {
 	/**
 	 * 公钥
 	 */
-	// private String captcha_id = "";
+	private String captchaId = "";
+
+	private String challengeId = "";
+
+	public String getChallengeId() {
+		return challengeId;
+	}
+
+	public void setChallengeId(String challengeId) {
+		this.challengeId = challengeId;
+	}
 
 	/**
 	 * 获取版本编号
@@ -93,6 +103,52 @@ public class GeetestLib {
 		return verName;
 	}
 
+	public String getCaptchaId() {
+		return captchaId;
+	}
+
+	public void setCaptchaId(String captchaId) {
+		this.captchaId = captchaId;
+	}
+
+	/**
+	 * processing before the captcha display on the web front
+	 * 
+	 * @return
+	 */
+	public int preProcess() {
+
+		// first check the server status , to handle failback
+		if (getGtServerStatus() != 1) {
+			return 0;
+		}
+
+		// just check the server side register
+		if (registerChallenge() != 1) {
+			return 0;
+		}
+
+		return 1;
+
+	}
+
+	/**
+	 * generate the dynamic front source
+	 * 
+	 * @param different
+	 *            product display mode :float,embed,popup
+	 * @return
+	 */
+	public String getGtFrontSource(String productType) {
+
+		String frontSource = String.format(
+				"<script type=\"text/javascript\" src=\"%s/get.php?"
+						+ "gt=%s&challenge=%s&product=%s\"></script>",
+				this.api_url, this.captchaId, this.challengeId, productType);
+		// System.out.print(frontSource);
+		return frontSource;
+	}
+
 	/**
 	 * 获取极验的服务器状态
 	 * 
@@ -104,7 +160,7 @@ public class GeetestLib {
 	public int getGtServerStatus() {
 
 		try {
-			final String GET_URL = api_url + "check_status.php";
+			final String GET_URL = api_url + "/check_status.php";
 			if (readContentFromGet(GET_URL).equals("ok")) {
 				return 1;
 			} else {
@@ -134,13 +190,16 @@ public class GeetestLib {
 	 * 
 	 * @return
 	 */
-	public int registerChallenge(String captcha_id, String challenge_id) {
+	public int registerChallenge() {
 		try {
-			String GET_URL = api_url + "register.php?gt=" + captcha_id
-					+ "&challenge=" + challenge_id;
+
+			this.setChallengeId(this.generateRandId());
+
+			String GET_URL = api_url + "/register.php?gt=" + this.captchaId
+					+ "&challenge=" + this.challengeId;
 			// System.out.print(GET_URL);
 			String result_str = readContentFromGet(GET_URL);
-			 System.out.println(result_str);
+			System.out.println(result_str);
 			if (result_str.equals("ok")) {
 				return 1;
 			} else {
@@ -405,6 +464,7 @@ public class GeetestLib {
 		}
 		wr.close();
 		rd.close();
+		socket.close();
 		return response;
 	}
 

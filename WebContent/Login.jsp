@@ -56,20 +56,18 @@ body {
 				<jsp:useBean id="geetestSdk" class="com.geetest.sdk.java.GeetestLib"
 					scope="request" />
 				<%
-				String captcha_id = "a40fd3b0d712165c5d13e6f747e948d4";
-				//String captcha_id = "0025ca9ce0c597b9a1ef76d307b78559";
-					String challenge_id = geetestSdk.generateRandId();
+					// todo: use the captcha_id to init the geetestSdk
+					geetestSdk.setCaptchaId("a40fd3b0d712165c5d13e6f747e948d4");
 				%>
 				<%
-					if (((geetestSdk.getGtServerStatus()) != 1)
-							|| (geetestSdk.registerChallenge(captcha_id,challenge_id)) != 1) {
+					if (geetestSdk.preProcess() != 1) {
 				%>
-				<h1>请插入自己服务器上的备选验证码</h1>
+				<h1>Geetest Server is down,Please use your own captcha system
+					in your web page</h1>
 				<%
 					} else {
 				%>
-				<script type="text/javascript"
-					src="http://api.geetest.com/get.php?gt=<%=captcha_id%>&challenge=<%=challenge_id%>=&product=embed"></script>
+				<%=geetestSdk.getGtFrontSource("embed")%>
 				<%
 					}
 				%>
