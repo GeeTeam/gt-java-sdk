@@ -116,9 +116,9 @@ public class GeetestLib {
 	public int preProcess() {
 
 		// first check the server status , to handle failback
-		if (getGtServerStatus() != 1) {
-			return 0;
-		}
+		// if (getGtServerStatus() != 1) {
+		// return 0;
+		// }
 
 		// just check the server side register
 		if (registerChallenge() != 1) {
@@ -202,7 +202,8 @@ public class GeetestLib {
 				return 0;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			gtlog("exception:register api:");
+			// e.printStackTrace();
 		}
 		return 0;
 	}
@@ -386,7 +387,7 @@ public class GeetestLib {
 	 * @param message
 	 */
 	public void gtlog(String message) {
-		// System.out.println("logger: " + message);
+		// System.out.println("gtlog: " + message);
 	}
 
 	private boolean checkResultByPrivate(String origin, String validate) {
