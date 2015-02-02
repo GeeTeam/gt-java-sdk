@@ -14,9 +14,6 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -192,15 +189,13 @@ public class GeetestLib {
 	 */
 	public int registerChallenge() {
 		try {
-
-			this.setChallengeId(this.generateRandId());
-
 			String GET_URL = api_url + "/register.php?gt=" + this.captchaId
 					+ "&challenge=" + this.challengeId;
 			// System.out.print(GET_URL);
 			String result_str = readContentFromGet(GET_URL);
-			System.out.println(result_str);
-			if (result_str.equals("ok")) {
+			// System.out.println(result_str);
+			if (32 == result_str.length()) {
+				this.challengeId = result_str;
 				return 1;
 			} else {
 				System.out.println("gServer register challenge failed");
@@ -210,45 +205,6 @@ public class GeetestLib {
 			e.printStackTrace();
 		}
 		return 0;
-	}
-
-	/**
-	 * 生成随机数id
-	 * 
-	 * @return
-	 */
-	public String generateRandId() {
-		String string = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-		String ti = System.currentTimeMillis() + "";
-		String sstr = shuffleForSortingString(string);
-		String rand_num_str = (int) (Math.random() * 100000) + "";// [0,99999]
-		String res = ti + sstr + rand_num_str;
-
-		String md5_hex_res = md5Encode(res);
-
-		return md5_hex_res;
-	}
-
-	private String shuffleForSortingString(String s) {
-		char[] c = s.toCharArray();
-		List<Character> lst = new ArrayList<Character>();
-		for (int i = 0; i < c.length; i++) {
-			lst.add(c[i]);
-		}
-
-		// System.out.println(lst);
-
-		Collections.shuffle(lst);
-
-		// System.out.println(lst);
-
-		String resultStr = "";
-		for (int i = 0; i < lst.size(); i++) {
-			resultStr += lst.get(i);
-		}
-
-		// System.out.println(resultStr);
-		return resultStr;
 	}
 
 	/**
