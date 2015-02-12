@@ -136,13 +136,12 @@ public class GeetestLib {
 	 *            product display mode :float,embed,popup
 	 * @return
 	 */
-	public String getGtFrontSource(int picId, String productType) {
+	public String getGtFrontSource(String productType) {
 
 		String frontSource = String.format(
 				"<script type=\"text/javascript\" src=\"%s/get.php?"
-						+ "gt=%s&challenge=%s&pic=%s&product=%s\"></script>",
-				this.api_url, this.captchaId, this.challengeId, picId,
-				productType);
+						+ "gt=%s&challenge=%s&product=%s\"></script>",
+				this.api_url, this.captchaId, this.challengeId, productType);
 		// System.out.print(frontSource);
 		return frontSource;
 	}

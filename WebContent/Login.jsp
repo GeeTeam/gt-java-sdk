@@ -58,7 +58,6 @@ body {
 				<%
 					// todo: use the captcha_id to init the geetestSdk
 					geetestSdk.setCaptchaId("a40fd3b0d712165c5d13e6f747e948d4");
-				    int picId =102;//TODO:set your picture id after
 				%>
 				<%
 					if (geetestSdk.preProcess() != 1) {
@@ -68,7 +67,7 @@ body {
 				<%
 					} else {
 				%>
-				<%=geetestSdk.getGtFrontSource(picId,"embed")%>
+				<%=geetestSdk.getGtFrontSource("embed")%>
 				<%
 					}
 				%>
