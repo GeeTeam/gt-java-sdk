@@ -27,8 +27,6 @@
 #. 在浏览器中访问http://localhost:8080/GtJavaSdkDemo/Login.jsp即可看到Demo界面
 
 
-.. image:: Res/QQ20140711140909.png
-
 
 
 联系作者：
