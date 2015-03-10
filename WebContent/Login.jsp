@@ -58,6 +58,8 @@ body {
 				<%
 					// todo: use the captcha_id to init the geetestSdk
 					geetestSdk.setCaptchaId("a40fd3b0d712165c5d13e6f747e948d4");
+					geetestSdk.setProductType("popup");
+					geetestSdk.setSubmitBtnId("submit-button");
 				%>
 				<%
 					if (geetestSdk.preProcess() != 1) {
@@ -67,7 +69,7 @@ body {
 				<%
 					} else {
 				%>
-				<%=geetestSdk.getGtFrontSource("embed")%>
+				<%=geetestSdk.getGtFrontSource()%>
 				<%
 					}
 				%>
@@ -76,7 +78,7 @@ body {
 
 
 			<div class="row">
-				<input type="submit" value="登录" />
+				<input type="submit" value="登录" id="submit-button" />
 			</div>
 			<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
 
@@ -89,17 +91,18 @@ body {
 					var challenge = selector(".geetest_challenge").value;
 					var validate = selector(".geetest_validate").value;
 					var seccode = selector(".geetest_seccode").value;
-					$.ajax({
-						url : "VerifyLoginServlet",
-						type : "post",
-						data : {
-							geetest_challenge : challenge,
-							geetest_validate : validate,
-							geetest_seccode : seccode
-						},
-						success : function() {
-						}
-					})
+					// 					$.ajax({
+					// 						url : "VerifyLoginServlet",
+					// 						type : "post",
+					// 						data : {
+					// 							geetest_challenge : challenge,
+					// 							geetest_validate : validate,
+					// 							geetest_seccode : seccode
+					// 						},
+					// 						success : function(result) {
+					// 							console.log(result);
+					// 						}
+					// 					})
 
 				}
 			</script>

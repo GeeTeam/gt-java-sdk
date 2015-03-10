@@ -35,7 +35,16 @@ public class GeetestLib {
 	 */
 	private final String verName = "15.1.28.1";
 
-	private final String api_url = "http://api.geetest.com";
+	private final String baseUrl = "api.geetest.com";
+	private final String api_url = "http://" + baseUrl;
+	private final int defaultIsMobile = 0;
+	private final int defaultMobileWidth = 260;// the default width of the
+												// mobile capthca
+
+	/**
+	 * 公钥
+	 */
+	private String captchaId = "";
 
 	/**
 	 * 私钥
@@ -43,11 +52,37 @@ public class GeetestLib {
 	private String privateKey = "";
 
 	/**
-	 * 公钥
+	 * the challenge
 	 */
-	private String captchaId = "";
-
 	private String challengeId = "";
+
+	/**
+	 * set the own private pictures,default is ""
+	 */
+	private String picId = "";
+
+	/**
+	 * he captcha product type,default is 'embed'
+	 */
+	private String productType = "embed";
+
+	/**
+	 * when the productType is popup,it needs to set the submitbutton
+	 */
+	private String submitBtnId = "submit-button";
+
+	public String getSubmitBtnId() {
+		return submitBtnId;
+	}
+
+	public void setSubmitBtnId(String submitBtnId) {
+		this.submitBtnId = submitBtnId;
+	}
+
+	/**
+	 * 是否是移动端的
+	 */
+	private int isMobile = defaultIsMobile;// 1--true,0-false
 
 	public String getChallengeId() {
 		return challengeId;
@@ -77,6 +112,34 @@ public class GeetestLib {
 	 * 一个无参构造函数
 	 */
 	public GeetestLib() {
+	}
+
+	public String getPicId() {
+		return picId;
+	}
+
+	public void setPicId(String picId) {
+		this.picId = picId;
+	}
+
+	public String getProductType() {
+		return productType;
+	}
+
+	public void setProductType(String productType) {
+		this.productType = productType;
+	}
+
+	public int getIsMobile() {
+		return isMobile;
+	}
+
+	public void setIsMobile(int isMobile) {
+		this.isMobile = isMobile;
+	}
+
+	public String getPrivateKey() {
+		return privateKey;
 	}
 
 	public void setPrivateKey(String privateKey) {
@@ -136,13 +199,22 @@ public class GeetestLib {
 	 *            product display mode :float,embed,popup
 	 * @return
 	 */
-	public String getGtFrontSource(String productType) {
+	public String getGtFrontSource() {
 
 		String frontSource = String.format(
 				"<script type=\"text/javascript\" src=\"%s/get.php?"
-						+ "gt=%s&challenge=%s&product=%s\"></script>",
-				this.api_url, this.captchaId, this.challengeId, productType);
-		// System.out.print(frontSource);
+						+ "gt=%s&challenge=%s", this.api_url, this.captchaId,
+				this.challengeId);
+
+		// if (this.productType.equals("popup")) {
+		// frontSource += String.format("&product=%s&popupbtnid=%s",
+		// this.productType, this.submitBtnId);
+		// } else {
+		// frontSource += String.format("&product=%s", this.productType);
+		// }
+
+		frontSource += "\"></script>";
+
 		return frontSource;
 	}
 
@@ -191,6 +263,14 @@ public class GeetestLib {
 		try {
 			String GET_URL = api_url + "/register.php?gt=" + this.captchaId
 					+ "&challenge=" + this.challengeId;
+
+			if (this.productType.equals("popup")) {
+				GET_URL += String.format("&product=%s&popupbtnid=%s",
+						this.productType, this.submitBtnId);
+			} else {
+				GET_URL += String.format("&product=%s", this.productType);
+			}
+
 			// System.out.print(GET_URL);
 			String result_str = readContentFromGet(GET_URL);
 			// System.out.println(result_str);
@@ -315,7 +395,7 @@ public class GeetestLib {
 		String validate = request.getParameter("geetest_validate");
 		String seccode = request.getParameter("geetest_seccode");
 
-		String host = "api.geetest.com";
+		String host = baseUrl;
 		String path = "/validate.php";
 		int port = 80;
 		String query = "seccode=" + seccode;
@@ -356,7 +436,7 @@ public class GeetestLib {
 	 * @time 2014122_171529 by zheng
 	 */
 	private boolean validate(String challenge, String validate, String seccode) {
-		String host = "api.geetest.com";
+		String host = baseUrl;
 		String path = "/validate.php";
 		int port = 80;
 		if (validate.length() > 0 && checkResultByPrivate(challenge, validate)) {
