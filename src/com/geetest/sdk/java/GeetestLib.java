@@ -200,18 +200,18 @@ public class GeetestLib {
 	 * @return
 	 */
 	public String getGtFrontSource() {
-
+		
 		String frontSource = String.format(
 				"<script type=\"text/javascript\" src=\"%s/get.php?"
 						+ "gt=%s&challenge=%s", this.api_url, this.captchaId,
 				this.challengeId);
 
-		// if (this.productType.equals("popup")) {
-		// frontSource += String.format("&product=%s&popupbtnid=%s",
-		// this.productType, this.submitBtnId);
-		// } else {
-		// frontSource += String.format("&product=%s", this.productType);
-		// }
+		if (this.productType.equals("popup")) {
+			frontSource += String.format("&product=%s&popupbtnid=%s",
+					this.productType, this.submitBtnId);
+		} else {
+			frontSource += String.format("&product=%s", this.productType);
+		}
 
 		frontSource += "\"></script>";
 
@@ -261,15 +261,14 @@ public class GeetestLib {
 	 */
 	public int registerChallenge() {
 		try {
-			String GET_URL = api_url + "/register.php?gt=" + this.captchaId
-					+ "&challenge=" + this.challengeId;
+			String GET_URL = api_url + "/register.php?gt=" + this.captchaId;
 
-			if (this.productType.equals("popup")) {
-				GET_URL += String.format("&product=%s&popupbtnid=%s",
-						this.productType, this.submitBtnId);
-			} else {
-				GET_URL += String.format("&product=%s", this.productType);
-			}
+			// if (this.productType.equals("popup")) {
+			// GET_URL += String.format("&product=%s&popupbtnid=%s",
+			// this.productType, this.submitBtnId);
+			// } else {
+			// GET_URL += String.format("&product=%s", this.productType);
+			// }
 
 			// System.out.print(GET_URL);
 			String result_str = readContentFromGet(GET_URL);
