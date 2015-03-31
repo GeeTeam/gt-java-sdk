@@ -17,17 +17,14 @@ public class VerifyLoginServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		
-		
-		
-		
-		// TODO add your own privateKey Here
-		String privateKey = "0f1a37e33c9ed10dd2e133fe2ae9c459";
-		
-		GeetestLib geetest = new GeetestLib(privateKey);
-		
+
+		// TODO： replace your own Key  here after create a Captcha App in
+		// 'my.geetest.com'
+		String private_key = "0f1a37e33c9ed10dd2e133fe2ae9c459";
+		GeetestLib geetest = new GeetestLib(private_key);
+
 		String gtResult = "fail";
-		
+
 		if (geetest.resquestIsLegal(request)) {
 			gtResult = geetest.enhencedValidateRequest(request);
 			System.out.println(gtResult);
@@ -36,8 +33,6 @@ public class VerifyLoginServlet extends HttpServlet {
 			gtResult = "fail";
 
 		}
-		
-		
 
 		if (gtResult.equals("success")) {
 			// TODO handle the Success result
@@ -52,10 +47,9 @@ public class VerifyLoginServlet extends HttpServlet {
 
 			response.setContentType("text/html; charset=UTF-8");
 			PrintWriter out = response.getWriter();
-			out.println("<h1>" + "forbidden!  with SDK version:   " 
+			out.println("<h1>" + "forbidden!  with SDK version:   "
 					+ geetest.getVersionInfo() + "</h1>");
-		}
-		else{
+		} else {
 			// TODO handle the Fail result
 			response.setContentType("text/html; charset=UTF-8");
 			PrintWriter out = response.getWriter();

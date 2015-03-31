@@ -56,8 +56,9 @@ body {
 				<jsp:useBean id="geetestSdk" class="com.geetest.sdk.java.GeetestLib"
 					scope="request" />
 				<%
-					// todo: use the captcha_id to init the geetestSdk
-					geetestSdk.setCaptchaId("a40fd3b0d712165c5d13e6f747e948d4");
+					//TODO： replace your own ID here  after create a Captcha App in 'my.geetest.com'
+					String captcha_id = "a40fd3b0d712165c5d13e6f747e948d4";
+					geetestSdk.setCaptchaId(captcha_id);
 					geetestSdk.setProductType("popup");
 					geetestSdk.setSubmitBtnId("submit-button");
 				%>
