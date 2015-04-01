@@ -33,7 +33,7 @@ public class GeetestLib {
 	/**
 	 * SDK版本名称
 	 */
-	private final String verName = "2.15.4.1.3";
+	private final String verName = "2.15.4.1.4";
 	private final String sdkLang = "java";// SD的语言类型
 
 	private final String baseUrl = "api.geetest.com";
@@ -419,7 +419,7 @@ public class GeetestLib {
 		String host = baseUrl;
 		String path = "/validate.php";
 		int port = 80;
-		String query = "seccode=" + seccode + "&sdk_version=" + this.sdkLang + "_"
+		String query = "seccode=" + seccode + "&sdk=" + this.sdkLang + "_"
 				+ this.verName;
 		String response = "";
 
