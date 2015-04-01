@@ -28,12 +28,12 @@ public class GeetestLib {
 	/**
 	 * SDK版本编号
 	 */
-	private final int verCode = 8;
+	// private final int verCode = 8;
 
 	/**
 	 * SDK版本名称
 	 */
-	private final String verName = "2.15.4.1.2";
+	private final String verName = "2.15.4.1.3";
 	private final String sdkLang = "java";// SD的语言类型
 
 	private final String baseUrl = "api.geetest.com";
@@ -170,9 +170,9 @@ public class GeetestLib {
 	// this.captcha_id = captcha_id;
 	// }
 
-	public int getVerCode() {
-		return verCode;
-	}
+	// public int getVerCode() {
+	// return verCode;
+	// }
 
 	public String getVerName() {
 		return verName;
@@ -419,8 +419,8 @@ public class GeetestLib {
 		String host = baseUrl;
 		String path = "/validate.php";
 		int port = 80;
-		String query = "seccode=" + seccode + "&sdk=" + this.verCode
-				+ "&sdklang=" + this.sdkLang;
+		String query = "seccode=" + seccode + "&sdk_version=" + this.sdkLang + "_"
+				+ this.verName;
 		String response = "";
 
 		try {
