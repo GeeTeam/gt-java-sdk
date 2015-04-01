@@ -34,10 +34,11 @@ public class GeetestLib {
 	 * SDK版本名称
 	 */
 	private final String verName = "2.15.4.1.1";
-	private final String sdkLang="java";//SD的语言类型
+	private final String sdkLang = "java";// SD的语言类型
 
 	private final String baseUrl = "api.geetest.com";
 	private final String api_url = "http://" + baseUrl;
+	private final String https_api_url = "https://" + baseUrl;// 一些页面是https
 	private final int defaultIsMobile = 0;
 	private final int defaultMobileWidth = 260;// the default width of the
 												// mobile capthca
@@ -66,6 +67,19 @@ public class GeetestLib {
 	 * he captcha product type,default is 'embed'
 	 */
 	private String productType = "embed";
+
+	/**
+	 * is secure
+	 */
+	private Boolean isHttps = false;
+
+	public Boolean getIsHttps() {
+		return isHttps;
+	}
+
+	public void setIsHttps(Boolean isHttps) {
+		this.isHttps = isHttps;
+	}
 
 	/**
 	 * when the productType is popup,it needs to set the submitbutton
@@ -202,9 +216,16 @@ public class GeetestLib {
 	 */
 	public String getGtFrontSource() {
 
+		String base_path = "";
+		if (this.isHttps) {
+			base_path = this.https_api_url;
+		} else {
+			base_path = this.api_url;
+		}
+
 		String frontSource = String.format(
 				"<script type=\"text/javascript\" src=\"%s/get.php?"
-						+ "gt=%s&challenge=%s", this.api_url, this.captchaId,
+						+ "gt=%s&challenge=%s", base_path, this.captchaId,
 				this.challengeId);
 
 		if (this.productType.equals("popup")) {
@@ -398,9 +419,10 @@ public class GeetestLib {
 		String host = baseUrl;
 		String path = "/validate.php";
 		int port = 80;
-		String query = "seccode=" + seccode + "&sdk=" + this.verCode + "&sdklang=" + this.sdkLang;
+		String query = "seccode=" + seccode + "&sdk=" + this.verCode
+				+ "&sdklang=" + this.sdkLang;
 		String response = "";
-		
+
 		try {
 			if (validate.length() <= 0) {
 				return "fail";
