@@ -33,7 +33,8 @@ public class GeetestLib {
 	/**
 	 * SDK版本名称
 	 */
-	private final String verName = "15.1.28.1";
+	private final String verName = "2.15.4.1.1";
+	private final String sdkLang="java";//SD的语言类型
 
 	private final String baseUrl = "api.geetest.com";
 	private final String api_url = "http://" + baseUrl;
@@ -200,7 +201,7 @@ public class GeetestLib {
 	 * @return
 	 */
 	public String getGtFrontSource() {
-		
+
 		String frontSource = String.format(
 				"<script type=\"text/javascript\" src=\"%s/get.php?"
 						+ "gt=%s&challenge=%s", this.api_url, this.captchaId,
@@ -397,9 +398,9 @@ public class GeetestLib {
 		String host = baseUrl;
 		String path = "/validate.php";
 		int port = 80;
-		String query = "seccode=" + seccode;
+		String query = "seccode=" + seccode + "&sdk=" + this.verCode + "&sdklang=" + this.sdkLang;
 		String response = "";
-
+		
 		try {
 			if (validate.length() <= 0) {
 				return "fail";
