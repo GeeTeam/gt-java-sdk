@@ -422,7 +422,8 @@ public class GeetestLib {
 		String query = "seccode=" + seccode + "&sdk=" + this.sdkLang + "_"
 				+ this.verName;
 		String response = "";
-
+		
+		gtlog(query);
 		try {
 			if (validate.length() <= 0) {
 				return "fail";
@@ -489,7 +490,7 @@ public class GeetestLib {
 	 * @param message
 	 */
 	public void gtlog(String message) {
-		// System.out.println("gtlog: " + message);
+		System.out.println("gtlog: " + message);
 	}
 
 	private boolean checkResultByPrivate(String origin, String validate) {
