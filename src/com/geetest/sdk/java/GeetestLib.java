@@ -33,7 +33,7 @@ public class GeetestLib {
 	/**
 	 * SDK版本名称
 	 */
-	private final String verName = "2.15.4.1.1";
+	private final String verName = "2.15.4.1.2";
 	private final String sdkLang = "java";// SD的语言类型
 
 	private final String baseUrl = "api.geetest.com";
