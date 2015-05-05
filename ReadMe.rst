@@ -30,14 +30,23 @@ API调用示例
 =========================
 
 
-设置captcha_id
+设置id/key
 -------------------------------
 
 .. code:: java
 
         String captcha_id = "a40fd3b0d712165c5d13e6f747e948d4";
         geetestSdk.setCaptchaId(captcha_id);
+        
 
+
+设置key
+------------------------------
+
+.. code:: java
+
+        String private_key = "0f1a37e33c9ed10dd2e133fe2ae9c459";
+		GeetestLib geetest = new GeetestLib(private_key);
 
 
 设置产品样式
