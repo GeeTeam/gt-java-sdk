@@ -59,6 +59,7 @@ body {
 					//TODO： replace your own ID here  after create a Captcha App in 'my.geetest.com'
 					String captcha_id = "a40fd3b0d712165c5d13e6f747e948d4";
 					geetestSdk.setCaptchaId(captcha_id);
+					//geetestSdk.setIsHttps(true);
 					//geetestSdk.setProductType("popup");
 					//geetestSdk.setSubmitBtnId("submit-button");
 					//geetestSdk.setIsHttps(true);

@@ -26,6 +26,48 @@
 #. 打开tomcat
 #. 在浏览器中访问http://localhost:8080/GtJavaSdkDemo/Login.jsp即可看到Demo界面
 
+API调用示例
+=========================
+
+
+设置captcha_id
+-------------------------------
+
+.. code:: java
+
+        String captcha_id = "a40fd3b0d712165c5d13e6f747e948d4";
+        geetestSdk.setCaptchaId(captcha_id);
+
+
+
+设置产品样式
+-----------------------------
+
+.. code:: java
+
+        geetestSdk.setProductType("embed");
+
+
+
+设置提交按钮id
+-----------------------------------------
+
+如果是popup的产品形式，则还需要设置submit-buttion-id
+
+.. code:: java
+
+        geetestSdk.setProductType("popup");
+        geetestSdk.setSubmitBtnId("submit-button");
+
+
+设置是否是https页面
+-----------------------------------------
+
+默认是http页面，经过设置后可以支持https页面
+
+.. code:: java
+
+        geetestSdk.setIsHttps(true);
 
 
 
