@@ -20,7 +20,7 @@ public class VerifyLoginServlet extends HttpServlet {
 
 		// TODO： replace your own Key  here after create a Captcha App in
 		// 'my.geetest.com'
-		String private_key = "0f1a37e33c9ed10dd2e133fe2ae9c459";
+		String private_key = "24a612ae8c62203f724c81a5a9b4e761";
 		GeetestLib geetest = new GeetestLib(private_key);
 
 		String gtResult = "fail";

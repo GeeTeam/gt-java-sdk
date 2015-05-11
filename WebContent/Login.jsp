@@ -57,7 +57,7 @@ body {
 					scope="request" />
 				<%
 					//TODO： replace your own ID here  after create a Captcha App in 'my.geetest.com'
-					String captcha_id = "a40fd3b0d712165c5d13e6f747e948d4";
+					String captcha_id = "626ddf82c800a41272d1da5591905ca9";//It's a capthca whihc needs to be register
 					geetestSdk.setCaptchaId(captcha_id);
 					//geetestSdk.setIsHttps(true);
 					//geetestSdk.setProductType("popup");
