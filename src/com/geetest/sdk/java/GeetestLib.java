@@ -324,8 +324,8 @@ public class GeetestLib {
 		HttpURLConnection connection = (HttpURLConnection) getUrl
 				.openConnection();
 
-		connection.setConnectTimeout(1000);// 设置连接主机超时（单位：毫秒）
-		connection.setReadTimeout(1000);// 设置从主机读取数据超时（单位：毫秒）
+		connection.setConnectTimeout(2000);// 设置连接主机超时（单位：毫秒）
+		connection.setReadTimeout(2000);// 设置从主机读取数据超时（单位：毫秒）
 
 		// 建立与服务器的连接，并未发送数据
 
