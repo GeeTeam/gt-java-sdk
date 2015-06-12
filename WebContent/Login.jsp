@@ -53,6 +53,30 @@ body {
 			<%--Start  Code--%>
 			<div class="row">
 
+				<script type="text/javascript">
+				//get  geetest server status
+					$.ajax({
+						url : "StartCapthcaServlet",
+						type : "get",
+						data : {},
+						success : function(result) {
+							console.log(result);
+							
+							if (result.register==false)
+							{
+							//use your own captcha template
+							}else
+							{
+							//1. 加入极验 前端
+							//2. 初始化操作等等
+							}
+							
+						}
+					})
+				</script>
+
+
+
 				<jsp:useBean id="geetestSdk" class="com.geetest.sdk.java.GeetestLib"
 					scope="request" />
 				<%

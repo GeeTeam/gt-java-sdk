@@ -18,7 +18,7 @@ public class VerifyLoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		// TODO： replace your own Key  here after create a Captcha App in
+		// TODO： replace your own Key here after create a Captcha App in
 		// 'my.geetest.com'
 		String private_key = "24a612ae8c62203f724c81a5a9b4e761";
 		GeetestLib geetest = new GeetestLib(private_key);
@@ -34,27 +34,20 @@ public class VerifyLoginServlet extends HttpServlet {
 
 		}
 
-		if (gtResult.equals("success")) {
+		if (gtResult.equals(GeetestLib.success_res)) {
 			// TODO handle the Success result
-
-			response.setContentType("text/html; charset=UTF-8");
 			PrintWriter out = response.getWriter();
-			out.println("<h1>" + "success!  with SDK version:   "
-					+ geetest.getVersionInfo() + "</h1>");
+			out.println(GeetestLib.success_res + ":" + geetest.getVersionInfo());
 
-		} else if (gtResult.equals("forbidden")) {
+		} else if (gtResult.equals(GeetestLib.forbidden_res)) {
 			// TODO handle the Forbidden result
-
-			response.setContentType("text/html; charset=UTF-8");
 			PrintWriter out = response.getWriter();
-			out.println("<h1>" + "forbidden!  with SDK version:   "
-					+ geetest.getVersionInfo() + "</h1>");
+			out.println(GeetestLib.forbidden_res + ":"
+					+ geetest.getVersionInfo());
 		} else {
 			// TODO handle the Fail result
-			response.setContentType("text/html; charset=UTF-8");
 			PrintWriter out = response.getWriter();
-			out.println("<h1>" + "fail!  with SDK version:"
-					+ geetest.getVersionInfo() + "</h1>");
+			out.println(GeetestLib.fail_res + ":" + geetest.getVersionInfo());
 		}
 
 	}

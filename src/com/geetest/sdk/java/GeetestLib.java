@@ -6,12 +6,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -33,15 +31,20 @@ public class GeetestLib {
 	/**
 	 * SDK版本名称
 	 */
-	private final String verName = "2.15.5.22.1";
+	private final String verName = "3.15.6.12.1";
 	private final String sdkLang = "java";// SD的语言类型
 
 	private final String baseUrl = "api.geetest.com";
 	private final String api_url = "http://" + baseUrl;
 	private final String https_api_url = "https://" + baseUrl;// 一些页面是https
 	private final int defaultIsMobile = 0;
-	private final int defaultMobileWidth = 260;// the default width of the
+	//private final int defaultMobileWidth = 260;// the default width of the
 												// mobile capthca
+
+	// 一些常量
+	public static final String success_res = "success";
+	public static final String fail_res = "fail";
+	public static final String forbidden_res = "forbidden";
 
 	/**
 	 * 公钥
@@ -422,7 +425,7 @@ public class GeetestLib {
 		String query = "seccode=" + seccode + "&sdk=" + this.sdkLang + "_"
 				+ this.verName;
 		String response = "";
-		
+
 		gtlog(query);
 		try {
 			if (validate.length() <= 0) {
@@ -528,18 +531,19 @@ public class GeetestLib {
 		return response;
 	}
 
-	/**
-	 * 转为UTF8编码
-	 * 
-	 * @time 2014年7月10日 下午3:29:45
-	 * @param str
-	 * @return
-	 * @throws UnsupportedEncodingException
-	 */
-	private String fixEncoding(String str) throws UnsupportedEncodingException {
-		String tempStr = new String(str.getBytes("UTF-8"));
-		return URLEncoder.encode(tempStr, "UTF-8");
-	}
+	// /**
+	// * 转为UTF8编码
+	// *
+	// * @time 2014年7月10日 下午3:29:45
+	// * @param str
+	// * @return
+	// * @throws UnsupportedEncodingException
+	// */
+	// private String fixEncoding(String str) throws
+	// UnsupportedEncodingException {
+	// String tempStr = new String(str.getBytes("UTF-8"));
+	// return URLEncoder.encode(tempStr, "UTF-8");
+	// }
 
 	/**
 	 * md5 加密
