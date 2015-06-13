@@ -8,9 +8,19 @@
 		<description></description>
 		<servlet-class>com.geetest.sdk.java.VerifyLoginServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>StartCapthcaServlet</servlet-name>
+		<display-name>StartCapthcaServlet</display-name>
+		<description></description>
+		<servlet-class>com.geetest.sdk.java.StartCapthcaServlet</servlet-class>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>VerifyLoginServlet</servlet-name>
 		<url-pattern>/VerifyLoginServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>StartCapthcaServlet</servlet-name>
+		<url-pattern>/StartCapthcaServlet</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>

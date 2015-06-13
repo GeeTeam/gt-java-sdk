@@ -36,7 +36,7 @@ public class StartCapthcaServlet extends HttpServlet {
 			responseStr = String.format("{\"register\":%s}", 0);
 		} else {
 			responseStr = String.format(
-					"{\"register\":%s,\"gt\":%s,\"challenge\":%s,}", 1,
+					"{\"success\":%s,\"gt\":\"%s\",\"challenge\":\"%s\"}", 1,
 					geetestSdk.getCaptchaId(), geetestSdk.getChallengeId());
 		}
 

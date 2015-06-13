@@ -8,10 +8,18 @@
 
 1. GeetestLib.java
 	极验的JavaSDK库
+#. GeetestConfig.java
+	用户配置文件。此处填写用户自己申请的验证模块ID/KEY
+#. StartCapthcaServlet.java
+	用户判断极验服务器是否Down机的示例Servlet
 #. VerifyLoginServlet.java
 	调用Sdk的示例Servlet
 #. Login.jsp
 	使用验证码的前端示范页面
+	
+	
+
+
 
 搭建开发环境 
 ===================
@@ -26,57 +34,6 @@
 #. 打开tomcat
 #. 在浏览器中访问http://localhost:8080/GtJavaSdkDemo/Login.jsp即可看到Demo界面
 
-API调用示例
-=========================
-
-
-设置id
--------------------------------
-
-.. code:: java
-
-        String captcha_id = "a40fd3b0d712165c5d13e6f747e948d4";
-        geetestSdk.setCaptchaId(captcha_id);
-        
-
-
-设置key
-------------------------------
-
-.. code:: java
-
-        String private_key = "0f1a37e33c9ed10dd2e133fe2ae9c459";
-		GeetestLib geetest = new GeetestLib(private_key);
-
-
-设置产品样式
------------------------------
-
-.. code:: java
-
-        geetestSdk.setProductType("embed");
-
-
-
-设置提交按钮
------------------------------------------
-
-如果是popup的产品形式，则还需要设置submit-buttion-id
-
-.. code:: java
-
-        geetestSdk.setProductType("popup");
-        geetestSdk.setSubmitBtnId("submit-button");
-
-
-设置是否是https页面
------------------------------------------
-
-默认是http页面，经过设置后可以支持https页面
-
-.. code:: java
-
-        geetestSdk.setIsHttps(true);
 
 
 
@@ -86,6 +43,16 @@ Email:dreamzsm@gmail.com
 
 发布日志（由新到旧）
 ===================================
+
+
+
+3.15.6.12.1
+------------------
+
+1. 根据极验服务升级写的全新的SDK使用方法Demo
+#. 实现前后端代码完全分离的调用模式
+#. 将用户要配置的参数以文件方式独立出来
+#. 更丰富的前端api调用示例
 
 
 2.15.5.22.1

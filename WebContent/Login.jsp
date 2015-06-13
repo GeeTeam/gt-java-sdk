@@ -35,9 +35,15 @@ body {
 	margin: 30px 0;
 }
 </style>
+
+<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+
+
 </head>
 
 <body>
+
+	<script src="http://api.geetest.com/get.php"></script>
 	<div class="wrap">
 		<h1>JavaEE站点安装Demo页面</h1>
 		<form method="post" action="VerifyLoginServlet">
@@ -52,89 +58,69 @@ body {
 
 			<%--Start  Code--%>
 			<div class="row">
+				<div id="div_id_embed"></div>
+
+				<%--End  Code--%>
+
+
+				<div class="row">
+					<input type="submit" value="登录" id="submit-button" />
+				</div>
 
 				<script type="text/javascript">
-				//get  geetest server status
+					//get  geetest server status, use the failback solution
 					$.ajax({
 						url : "StartCapthcaServlet",
 						type : "get",
-						data : {},
+						dataType : 'JSON',
 						success : function(result) {
 							console.log(result);
-							
-							if (result.register==false)
-							{
-							//use your own captcha template
-							}else
-							{
-							//1. 加入极验 前端
-							//2. 初始化操作等等
+							if (result.success) {
+								//1. use geetest capthca
+								window.gt_captcha_obj = new window.Geetest({
+									gt : result.gt,
+									challenge : result.challenge,
+									product : 'embed'
+								});
+
+								gt_captcha_obj.appendTo("#div_id_embed");
+
+								//Ajax request demo,if you use submit form ,then ignore it 
+								gt_captcha_obj.onSuccess(function() {
+									geetest_ajax_results()
+								});
+
+							} else {
+								//failback :use your own captcha template
+								//Geetest Server is down,Please use your own captcha system	in your web page
+								//or use the simple geetest failback solution
 							}
-							
+
 						}
 					})
 				</script>
-
-
-
-				<jsp:useBean id="geetestSdk" class="com.geetest.sdk.java.GeetestLib"
-					scope="request" />
-				<%
-					//TODO： replace your own ID here  after create a Captcha App in 'my.geetest.com'
-					String captcha_id = "626ddf82c800a41272d1da5591905ca9";//It's a capthca whihc needs to be register
-					geetestSdk.setCaptchaId(captcha_id);
-					//geetestSdk.setIsHttps(true);
-					//geetestSdk.setProductType("popup");
-					//geetestSdk.setSubmitBtnId("submit-button");
-					//geetestSdk.setIsHttps(true);
-				%>
-				<%
-					if (geetestSdk.preProcess() != 1) {
-				%>
-				<h1>Geetest Server is down,Please use your own captcha system
-					in your web page</h1>
-				<%
-					} else {
-				%>
-				<%=geetestSdk.getGtFrontSource()%>
-				<%
-					}
-				%>
+				<div class="row">
+					<input type="button" value="测试自定义刷接口" onclick="geetest_refresh()" />
+				</div>
 			</div>
-			<%--End  Code--%>
 
-
-			<div class="row">
-				<input type="submit" value="登录" id="submit-button" />
-			</div>
-			<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
-
-			<!-- 			ajax post demo -->
 			<script type="text/javascript">
-				function gt_custom_ajax(result, selector, message) {
+				function geetest_refresh() {
+					console.log("you can use this api in your own js function")
+					gt_captcha_obj.refresh();
+				}
 
-					console.log(result);
-
-					var challenge = selector(".geetest_challenge").value;
-					var validate = selector(".geetest_validate").value;
-					var seccode = selector(".geetest_seccode").value;
-					// 					$.ajax({
-					// 						url : "VerifyLoginServlet",
-					// 						type : "post",
-					// 						data : {
-					// 							geetest_challenge : challenge,
-					// 							geetest_validate : validate,
-					// 							geetest_seccode : seccode
-					// 						},
-					// 						success : function(result) {
-					// 							console.log(result);
-					// 						}
-					// 					})
-
+				function geetest_ajax_results() {
+					$.ajax({
+						url : "VerifyLoginServlet",
+						type : "post",
+						data : gt_captcha_obj.getValidate(),
+						success : function(sdk_result) {
+							console.log(sdk_result)
+						}
+					});
 				}
 			</script>
-
-
 
 		</form>
 	</div>
