@@ -18,10 +18,9 @@ public class VerifyLoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		// TODO： replace your own Key here after create a Captcha App in
-		// 'my.geetest.com'
-		String private_key = "24a612ae8c62203f724c81a5a9b4e761";
-		GeetestLib geetest = new GeetestLib(private_key);
+		
+		//get session to share the object
+		GeetestLib geetest = (GeetestLib)request.getSession().getAttribute("geetest");
 
 		String gtResult = "fail";
 

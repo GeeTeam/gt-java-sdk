@@ -112,7 +112,7 @@ body {
 
 				function geetest_ajax_results() {
 					$.ajax({
-						url : "VerifyLoginServlet",
+						url : "/todo/VerifyLoginServlet",//todo:set the servelet of your own
 						type : "post",
 						data : gt_captcha_obj.getValidate(),
 						success : function(sdk_result) {

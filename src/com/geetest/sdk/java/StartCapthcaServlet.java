@@ -24,11 +24,12 @@ public class StartCapthcaServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
+		//Conifg the parameter of the geetest object
 		GeetestLib geetestSdk = new GeetestLib();
 		geetestSdk.setCaptchaId(GeetestConfig.getCaptcha_id());
 		geetestSdk.setPrivateKey(GeetestConfig.getPrivate_key());
 
-		request.setAttribute("geetest", geetestSdk);
+		request.getSession().setAttribute("geetest", geetestSdk);//set session to share the object
 
 		String responseStr = "{}";
 
