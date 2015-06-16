@@ -6,13 +6,13 @@
 		<servlet-name>VerifyLoginServlet</servlet-name>
 		<display-name>VerifyLoginServlet</display-name>
 		<description></description>
-		<servlet-class>com.geetest.sdk.java.VerifyLoginServlet</servlet-class>
+		<servlet-class>com.geetest.sdk.java.web.demo.VerifyLoginServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<servlet-name>StartCapthcaServlet</servlet-name>
 		<display-name>StartCapthcaServlet</display-name>
 		<description></description>
-		<servlet-class>com.geetest.sdk.java.StartCapthcaServlet</servlet-class>
+		<servlet-class>com.geetest.sdk.java.web.demo.StartCapthcaServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>VerifyLoginServlet</servlet-name>

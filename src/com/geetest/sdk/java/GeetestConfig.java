@@ -1,7 +1,7 @@
 package com.geetest.sdk.java;
 
 /**
- * 使用Get的方式返回：challenge和capthca_id 此方式以实现前后端完全分离的开发模式
+ * 使用Get的方式返回：challenge和capthca_id 此方式以实现前后端完全分离的开发模式，如果是多实例，可以以此为模板，多定义几个GeetestConfig文件。分别初始化即可 
  * 
  * @author zheng
  *

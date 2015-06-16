@@ -1,4 +1,4 @@
-package com.geetest.sdk.java;
+package com.geetest.sdk.java.web.demo;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -7,6 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.geetest.sdk.java.GeetestLib;
 
 public class VerifyLoginServlet extends HttpServlet {
 
@@ -18,20 +20,22 @@ public class VerifyLoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		
-		//get session to share the object
-		GeetestLib geetest = (GeetestLib)request.getSession().getAttribute("geetest");
+		// get session to share the object
+		GeetestLib geetest = GeetestLib.getGtSession(request);
+		int gt_server_status_code = GeetestLib
+				.getGtServerStatusSession(request);
 
 		String gtResult = "fail";
 
-		if (geetest.resquestIsLegal(request)) {
+		if (gt_server_status_code == 1) {
 			gtResult = geetest.enhencedValidateRequest(request);
 			System.out.println(gtResult);
 		} else {
 			// TODO use you own system when geetest-server is down:failback
+			System.out.println("failback:use your own server captcha validate");
 			gtResult = "fail";
-
 		}
+
 
 		if (gtResult.equals(GeetestLib.success_res)) {
 			// TODO handle the Success result

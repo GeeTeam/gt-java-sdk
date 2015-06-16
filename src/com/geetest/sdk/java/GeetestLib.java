@@ -31,15 +31,18 @@ public class GeetestLib {
 	/**
 	 * SDK版本名称
 	 */
-	private final String verName = "3.15.6.12.1";
+	private final String verName = "3.15.6.16.1";
 	private final String sdkLang = "java";// SD的语言类型
+
+	private final static String gt_session_key = "geetest";// geetest对象存储的session的key值
+	private final static String gt_server_status_session_key = "gt_server_status";// 极验服务器状态key值
 
 	private final String baseUrl = "api.geetest.com";
 	private final String api_url = "http://" + baseUrl;
 	private final String https_api_url = "https://" + baseUrl;// 一些页面是https
 	private final int defaultIsMobile = 0;
-	//private final int defaultMobileWidth = 260;// the default width of the
-												// mobile capthca
+	// private final int defaultMobileWidth = 260;// the default width of the
+	// mobile capthca
 
 	// 一些常量
 	public static final String success_res = "success";
@@ -130,6 +133,74 @@ public class GeetestLib {
 	 * 一个无参构造函数
 	 */
 	public GeetestLib() {
+	}
+
+	// public static GeetestLib createGtInstance() {
+	// GeetestLib geetestSdk = new GeetestLib();
+	// geetestSdk.setCaptchaId(GeetestConfig.getCaptcha_id());
+	// geetestSdk.setPrivateKey(GeetestConfig.getPrivate_key());
+	//
+	// return geetestSdk;
+	// }
+
+	/**
+	 * 将当前实例设置到session中
+	 * 
+	 * @param request
+	 */
+	public void setGtSession(HttpServletRequest request) {
+		request.getSession().setAttribute(gt_session_key, this);// set session
+	}
+
+	/**
+	 * 极验服务器的gt-server状态值
+	 * 
+	 * @param request
+	 */
+	public void setGtServerStatusSession(HttpServletRequest request,
+			int statusCode) {
+		request.getSession().setAttribute(gt_server_status_session_key,
+				statusCode);// set session
+	}
+
+	/**
+	 * 获取session
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public static GeetestLib getGtSession(HttpServletRequest request) {
+		return (GeetestLib) request.getSession().getAttribute(gt_session_key);
+	}
+
+	/**
+	 * 0表示不正常，1表示正常
+	 * @param request
+	 * @return
+	 */
+	public static int getGtServerStatusSession(HttpServletRequest request) {
+		return (int) request.getSession().getAttribute(
+				gt_server_status_session_key);
+	}
+
+	/**
+	 * 预处理失败后的返回格式串
+	 * 
+	 * @return
+	 */
+	public String getFailPreProcessRes() {
+		return String.format("{\"success\":%s}", 0);
+	}
+
+	/**
+	 * 预处理成功后的标准串
+	 * 
+	 * @return
+	 */
+	public String getSuccessPreProcessRes() {
+		return String.format(
+				"{\"success\":%s,\"gt\":\"%s\",\"challenge\":\"%s\"}", 1,
+				this.getCaptchaId(), this.getChallengeId());
 	}
 
 	public String getPicId() {
