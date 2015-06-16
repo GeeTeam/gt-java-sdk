@@ -31,16 +31,19 @@ public class GeetestLib {
 	/**
 	 * SDK版本名称
 	 */
-	private final String verName = "3.15.6.16.1";
-	private final String sdkLang = "java";// SD的语言类型
+	protected final String verName = "3.15.6.16.1";
+	protected final String sdkLang = "java";// SD的语言类型
 
-	private final static String gt_session_key = "geetest";// geetest对象存储的session的key值
-	private final static String gt_server_status_session_key = "gt_server_status";// 极验服务器状态key值
+	protected final static String gt_session_key = "geetest";// geetest对象存储的session的key值
+	protected final static String gt_server_status_session_key = "gt_server_status";// 极验服务器状态key值
 
-	private final String baseUrl = "api.geetest.com";
-	private final String api_url = "http://" + baseUrl;
-	private final String https_api_url = "https://" + baseUrl;// 一些页面是https
-	private final int defaultIsMobile = 0;
+	protected final String baseUrl = "api.geetest.com";
+	protected final String api_url = "http://" + baseUrl;
+	protected final String https_api_url = "https://" + baseUrl;// 一些页面是https
+	protected final int com_port = 80;//通讯端口号
+	
+	
+	protected final int defaultIsMobile = 0;
 	// private final int defaultMobileWidth = 260;// the default width of the
 	// mobile capthca
 
@@ -175,6 +178,7 @@ public class GeetestLib {
 
 	/**
 	 * 0表示不正常，1表示正常
+	 * 
 	 * @param request
 	 * @return
 	 */
@@ -486,6 +490,10 @@ public class GeetestLib {
 	 */
 	public String enhencedValidateRequest(HttpServletRequest request) {
 
+		if (!resquestIsLegal(request)) {
+			return "fail";
+		}
+
 		String challenge = request.getParameter("geetest_challenge");
 		String validate = request.getParameter("geetest_validate");
 		String seccode = request.getParameter("geetest_seccode");
@@ -493,8 +501,12 @@ public class GeetestLib {
 		String host = baseUrl;
 		String path = "/validate.php";
 		int port = 80;
-		String query = "seccode=" + seccode + "&sdk=" + this.sdkLang + "_"
-				+ this.verName;
+		// String query = "seccode=" + seccode + "&sdk=" + this.sdkLang + "_"
+		// + this.verName;
+
+		String query = String.format("seccode=%s&sdk=%s", seccode,
+				(this.sdkLang + "_" + this.verName));
+
 		String response = "";
 
 		gtlog(query);
@@ -567,13 +579,23 @@ public class GeetestLib {
 		System.out.println("gtlog: " + message);
 	}
 
-	private boolean checkResultByPrivate(String origin, String validate) {
+	protected boolean checkResultByPrivate(String origin, String validate) {
 		String encodeStr = md5Encode(privateKey + "geetest" + origin);
 		return validate.equals(encodeStr);
 	}
 
-	private String postValidate(String host, String path, String data, int port)
-			throws Exception {
+	/**
+	 * fuck，貌似不是Post方式，后面重构时修改名字
+	 * 
+	 * @param host
+	 * @param path
+	 * @param data
+	 * @param port
+	 * @return
+	 * @throws Exception
+	 */
+	protected String postValidate(String host, String path, String data,
+			int port) throws Exception {
 		String response = "error";
 		// data=fixEncoding(data);
 		InetAddress addr = InetAddress.getByName(host);
