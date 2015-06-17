@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.geetest.sdk.java.GeetestConfig;
 import com.geetest.sdk.java.GeetestMsgLib;
+import com.geetest.sdk.java.web.demo.GeetestConfig;
 
 /**
  * 使用Get的方式返回：challenge和capthca_id 此方式以实现前后端完全分离的开发模式 专门实现failback
@@ -29,8 +29,8 @@ public class StartMsgCapthcaServlet extends HttpServlet {
 
 		// Conifg the parameter of the geetest object
 		GeetestMsgLib gtMsgSdk = new GeetestMsgLib();
-		gtMsgSdk.setCaptchaId(GeetestConfig.getCaptcha_id());
-		gtMsgSdk.setPrivateKey(GeetestConfig.getPrivate_key());
+		gtMsgSdk.setCaptchaId(GeetestMsgConfig.getCaptcha_id());
+		gtMsgSdk.setPrivateKey(GeetestMsgConfig.getPrivate_key());
 
 		gtMsgSdk.setGtSession(request);
 

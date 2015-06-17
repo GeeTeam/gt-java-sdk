@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.geetest.sdk.java.GeetestConfig;
 import com.geetest.sdk.java.GeetestLib;
 
 /**
