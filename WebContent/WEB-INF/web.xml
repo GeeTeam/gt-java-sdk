@@ -2,20 +2,28 @@
 <!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN" "http://java.sun.com/j2ee/dtds/web-app_2_2.dtd">
 <web-app id="WebApp_ID">
 	<display-name>GtJavaSdkDemo</display-name>
-	<servlet>
-		<servlet-name>VerifyLoginServlet</servlet-name>
-		<display-name>VerifyLoginServlet</display-name>
-		<description></description>
-		<servlet-class>com.geetest.sdk.java.web.demo.VerifyLoginServlet</servlet-class>
-	</servlet>
+
 	<servlet>
 		<servlet-name>StartCapthcaServlet</servlet-name>
 		<display-name>StartCapthcaServlet</display-name>
 		<description></description>
 		<servlet-class>com.geetest.sdk.java.web.demo.StartCapthcaServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>VerifyLoginServlet</servlet-name>
+		<display-name>VerifyLoginServlet</display-name>
+		<description></description>
+		<servlet-class>com.geetest.sdk.java.web.demo.VerifyLoginServlet</servlet-class>
+	</servlet>
 
 
+
+	<servlet>
+		<servlet-name>StartMsgCapthcaServlet</servlet-name>
+		<display-name>StartMsgCapthcaServlet</display-name>
+		<description></description>
+		<servlet-class>com.geetest.sdk.java.msg.demo.StartMsgCapthcaServlet</servlet-class>
+	</servlet>
 	<servlet>
 		<servlet-name>VerifyGeetestServlet</servlet-name>
 		<display-name>VerifyGeetestServlet</display-name>
@@ -23,11 +31,13 @@
 		<servlet-class>com.geetest.sdk.java.msg.demo.VerifyGeetestServlet</servlet-class>
 	</servlet>
 	<servlet>
-		<servlet-name>StartMsgCapthcaServlet</servlet-name>
-		<display-name>StartMsgCapthcaServlet</display-name>
+		<servlet-name>ValidateMsgServlet</servlet-name>
+		<display-name>ValidateMsgServlet</display-name>
 		<description></description>
-		<servlet-class>com.geetest.sdk.java.msg.demo.StartMsgCapthcaServlet</servlet-class>
+		<servlet-class>com.geetest.sdk.java.msg.demo.ValidateMsgServlet</servlet-class>
 	</servlet>
+
+
 
 
 	<servlet-mapping>
@@ -39,13 +49,20 @@
 		<url-pattern>/StartCapthcaServlet</url-pattern>
 	</servlet-mapping>
 
+
+	<servlet-mapping>
+		<servlet-name>StartMsgCapthcaServlet</servlet-name>
+		<url-pattern>/StartMsgCapthcaServlet</url-pattern>
+	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>VerifyGeetestServlet</servlet-name>
 		<url-pattern>/VerifyGeetestServlet</url-pattern>
 	</servlet-mapping>
+
+
 	<servlet-mapping>
-		<servlet-name>StartMsgCapthcaServlet</servlet-name>
-		<url-pattern>/StartMsgCapthcaServlet</url-pattern>
+		<servlet-name>ValidateMsgServlet</servlet-name>
+		<url-pattern>/ValidateMsgServlet</url-pattern>
 	</servlet-mapping>
 
 	<welcome-file-list>

@@ -37,12 +37,12 @@ body {
 </style>
 
 <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
-<script src="http://api.geetest.com/get.php"></script>
+
 </head>
 
 <body>
 
-	
+	<script src="http://api.geetest.com/get.php"></script>
 	<div class="wrap">
 		<h1>JavaEE站点安装Demo页面</h1>
 		<form method="post" action="ValidateMsgServlet">
@@ -59,8 +59,7 @@ body {
 				<div id="div_id_embed"></div>
 
 				<div class="box">
-					<label>手机：</label> <input type="text" name="phone_num"
-						id="phone_num" />
+					<label>手机：</label> <input type="text" name="phone" id="phone" />
 				</div>
 				<br />
 				<div class="box mes-box">
@@ -68,9 +67,43 @@ body {
 						name="geetest_msg_code" value="" />
 					<button type="button" class="mes-button" onClick="getMsgCode()">获取验证码</button>
 				</div>
-				<div class="box red">短信验证发送失败</div>
-				<div class="box green">短信验证发送成功</div>
-				<div class="box mes-red">滑动验证未通过</div>
+
+				<script type="text/javascript">
+					//get phone message validate code
+					function getMsgCode() {
+
+						post_gt_validate_data = gt_captcha_obj.getValidate();
+						post_gt_validate_data.phone = $("input[name='phone']")
+								.val();
+
+						$
+								.ajax({
+									url : "VerifyGeetestServlet",
+									type : "post",
+									data : post_gt_validate_data,
+									success : function(sdk_result) {
+
+										if (sdk_result == 1) {
+											console
+													.log("the picture capthca is success,and wait for message");
+										}
+
+										console.log(sdk_result);
+										if (sdk_result == -6) {
+											console
+													.log("the picture capthca is fail");
+										}
+
+										if (sdk_result == -10) {
+											console.log("the form is wrong");
+										}
+
+										//TODO  set the notice before message captcha
+									}
+								});
+					}
+				</script>
+
 
 				<div class="row">
 					<input type="submit" value="登录" id="submit-button" />
@@ -79,59 +112,44 @@ body {
 				<script type="text/javascript">
 					//get  geetest server status, use the failback solution
 					$
-							.ajax({
-								url : "StartMsgCapthcaServlet",
-								type : "get",
-								dataType : 'JSON',
-								success : function(result) {
-									console.log(result);
-									if (result.success) {
-										//1. use geetest capthca
-										window.gt_captcha_obj = new window.Geetest(
-												{
-													gt : result.gt,
-													challenge : result.challenge,
-													product : 'embed'
-												});
+							.ajax(
+									{
+										url : "StartMsgCapthcaServlet",
+										type : "get",
+										dataType : 'JSON',
+										success : function(result) {
+											console.log(result);
+											if (result.success) {
+												//1. use geetest capthca
+												window.gt_captcha_obj = new window.Geetest(
+														{
+															gt : result.gt,
+															challenge : result.challenge,
+															product : 'embed'
+														});
 
-										gt_captcha_obj
-												.appendTo("#div_id_embed");
+												gt_captcha_obj
+														.appendTo("#div_id_embed");
 
-										//Ajax request demo,if you use submit form ,then ignore it 
-										gt_captcha_obj.onSuccess(function() {
-											console.log('define your own callback');
-										});
+												//Ajax request demo,if you use submit form ,then ignore it 
+												gt_captcha_obj
+														.onSuccess(function() {
+															console
+																	.log('define your own callback');
+														});
 
-									} else {
-										//failback :use your own captcha template
-										//Geetest Server is down,Please use your own captcha system	in your web page
-										//or use the simple geetest failback solution
-										$("#div_id_embed")
-												.html(
-														'failback:gt-server is down ,please use your own captcha front');
-										//document.write('gt-server is down ,please use your own captcha')
-									}
+											} else {
+												//failback :use your own captcha template
+												//Geetest Server is down,Please use your own captcha system	in your web page
+												//or use the simple geetest failback solution
+												$("#div_id_embed")
+														.html(
+																'failback:gt-server is down ,please use your own captcha front');
+												//document.write('gt-server is down ,please use your own captcha')
+											}
 
-								}
-							})
-
-					//get phone message validate code
-					function getMsgCode() {
-
-						post_gt_validate_data = gt_captcha_obj.getValidate();
-						post_gt_validate_data.phone_num = $(
-								"input[name='phone_num']").val();
-
-						$.ajax({
-							url : "VerifyGeetestServlet",
-							type : "post",
-							data : post_gt_validate_data,
-							success : function(sdk_result) {
-								//console.log(sdk_result);
-								//TODO  set the notice before message captcha
-							}
-						});
-					}
+										}
+									})
 				</script>
 				<div class="row">
 					<input type="button" value="测试自定义刷接口" onclick="geetest_refresh()" />

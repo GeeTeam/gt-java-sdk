@@ -30,29 +30,27 @@ public class ValidateMsgServlet extends HttpServlet {
 		// get session to share the object
 		GeetestMsgLib gtMsg = GeetestMsgLib.getGtMsgSession(request);
 
-		String gtResult = "fail";
+		int gtResult = -10;
 
 		try {
 			gtResult = gtMsg.validateMsgCode(request);
+			gtMsg.gtlog(String.format("msg validate result:%s", gtResult));
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		//TODO 二次短信验证结果处理
 
-		if (gtResult.equals(GeetestMsgLib.success_res)) {
+		// TODO 二次短信验证结果处理
+
+		if (gtResult == 1) {
 			// TODO handle the Success result
 			PrintWriter out = response.getWriter();
-			out.println(GeetestLib.success_res + ":" + gtMsg.getVersionInfo());
+			out.println(gtResult);
 
-		} else if (gtResult.equals(GeetestMsgLib.forbidden_res)) {
-			// TODO handle the Forbidden result
-			PrintWriter out = response.getWriter();
-			out.println(GeetestLib.forbidden_res + ":" + gtMsg.getVersionInfo());
 		} else {
 			// TODO handle the Fail result
 			PrintWriter out = response.getWriter();
-			out.println(GeetestLib.fail_res + ":" + gtMsg.getVersionInfo());
+			out.println(gtResult);
 		}
 
 	}

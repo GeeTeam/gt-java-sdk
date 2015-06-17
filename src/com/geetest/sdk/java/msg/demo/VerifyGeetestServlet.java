@@ -11,6 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 import com.geetest.sdk.java.GeetestLib;
 import com.geetest.sdk.java.GeetestMsgLib;
 
+/**
+ * Msg套件下的拼图一次验证
+ * 
+ * @author zheng
+ *
+ */
 public class VerifyGeetestServlet extends HttpServlet {
 
 	/**
@@ -22,37 +28,31 @@ public class VerifyGeetestServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 
 		// get session to share the object
-		GeetestMsgLib geetest_msg = (GeetestMsgLib)GeetestMsgLib.getGtMsgSession(request);
+		GeetestMsgLib gtMsgSdk = (GeetestMsgLib) GeetestMsgLib
+				.getGtMsgSession(request);
 		int gt_server_status_code = GeetestLib
 				.getGtServerStatusSession(request);
 
-		String gtResult = "fail";
+		int gtResult = -10;
 
 		if (gt_server_status_code == 1) {
-			gtResult = geetest_msg.enhencedValidateRequest(request);
+			gtResult = gtMsgSdk.sendMsgCodeReq(request);
 			System.out.println(gtResult);
 		} else {
 			// TODO use you own system when geetest-server is down:failback
 			System.out.println("failback:use your own server captcha validate");
-			gtResult = "fail";
+			gtResult = -10;
 		}
 
-		if (gtResult.equals(GeetestLib.success_res)) {
-			// TODO handle the Success result
-			geetest_msg.sendMsgCodeReq(request);
-			
-			PrintWriter out = response.getWriter();
-			out.println(GeetestLib.success_res + ":" + geetest_msg.getVersionInfo());
 
-		} else if (gtResult.equals(GeetestLib.forbidden_res)) {
-			// TODO handle the Forbidden result
+		if (gtResult == 1) {
+			// TODO handle the Success result
 			PrintWriter out = response.getWriter();
-			out.println(GeetestLib.forbidden_res + ":"
-					+ geetest_msg.getVersionInfo());
+			out.println(gtResult);
 		} else {
 			// TODO handle the Fail result
 			PrintWriter out = response.getWriter();
-			out.println(GeetestLib.fail_res + ":" + geetest_msg.getVersionInfo());
+			out.println(gtResult);
 		}
 
 	}

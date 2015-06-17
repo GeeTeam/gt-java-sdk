@@ -14,9 +14,12 @@
 	用户判断极验服务器是否Down机的示例Servlet
 #. VerifyLoginServlet.java
 	调用Sdk的示例Servlet
-#. Login.jsp
-	使用验证码的前端示范页面
-	
+#. login.jsp
+	行为验证的前端示范页面
+#. msg_login.jsp
+	行为验证和短信验证的前端示范页面
+#. ./lib/java-json.jar
+    Java的json解码包。用户如果有其它包可以在此替换。
 	
 
 
@@ -60,6 +63,14 @@ Email:dreamzsm@gmail.com
 
 发布日志（由新到旧）
 ===================================
+
+
+3.15.6.17.1
+---------------------------
+
+1. 增加了gt-message的demo
+#. 采用面向对象的方式，重构了代码
+#. 后续会继续重构此代码，但是此项目已经是可用版本
 
 
 3.15.6.16.1

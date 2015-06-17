@@ -40,9 +40,8 @@ public class GeetestLib {
 	protected final String baseUrl = "api.geetest.com";
 	protected final String api_url = "http://" + baseUrl;
 	protected final String https_api_url = "https://" + baseUrl;// 一些页面是https
-	protected final int com_port = 80;//通讯端口号
-	
-	
+	protected final int com_port = 80;// 通讯端口号
+
 	protected final int defaultIsMobile = 0;
 	// private final int defaultMobileWidth = 260;// the default width of the
 	// mobile capthca
@@ -51,6 +50,14 @@ public class GeetestLib {
 	public static final String success_res = "success";
 	public static final String fail_res = "fail";
 	public static final String forbidden_res = "forbidden";
+
+	// 前端验证的表单值--属于接口，不允许修改
+	protected final String fn_geetest_challenge = "geetest_challenge";
+	protected final String fn_geetest_validate = "geetest_validate";
+	protected final String fn_geetest_seccode = "geetest_seccode";
+	
+	protected Boolean debugCode = true;//调试开关，是否输出调试日志
+
 
 	/**
 	 * 公钥
@@ -115,6 +122,16 @@ public class GeetestLib {
 	public void setChallengeId(String challengeId) {
 		this.challengeId = challengeId;
 	}
+	
+	
+	public final Boolean getDebugCode() {
+		return debugCode;
+	}
+
+	public final void setDebugCode(Boolean debugCode) {
+		this.debugCode = debugCode;
+	}
+
 
 	/**
 	 * 获取版本编号
@@ -153,6 +170,7 @@ public class GeetestLib {
 	 */
 	public void setGtSession(HttpServletRequest request) {
 		request.getSession().setAttribute(gt_session_key, this);// set session
+		this.gtlog("set session succeed");
 	}
 
 	/**
@@ -430,13 +448,18 @@ public class GeetestLib {
 	 * @param gtObj
 	 * @return
 	 */
-	private boolean objIsEmpty(Object gtObj) {
-		if (gtObj != null) {
-			return false;
+	protected boolean objIsEmpty(Object gtObj) {
+		if (gtObj == null) {
+			return true;
+		}
+		
+		if(gtObj.toString().trim().length()==0)
+		{
+			return true;
 		}
 		// && gtObj.toString().trim().length() > 0
 
-		return true;
+		return false;
 	}
 
 	/**
@@ -448,15 +471,15 @@ public class GeetestLib {
 	 */
 	public boolean resquestIsLegal(HttpServletRequest request) {
 
-		if (objIsEmpty(request.getParameter("geetest_challenge"))) {
+		if (objIsEmpty(request.getParameter(this.fn_geetest_challenge))) {
 			return false;
 		}
 
-		if (objIsEmpty(request.getParameter("geetest_validate"))) {
+		if (objIsEmpty(request.getParameter(this.fn_geetest_validate))) {
 			return false;
 		}
 
-		if (objIsEmpty(request.getParameter("geetest_seccode"))) {
+		if (objIsEmpty(request.getParameter(this.fn_geetest_seccode))) {
 			return false;
 		}
 
@@ -473,9 +496,9 @@ public class GeetestLib {
 	public boolean validateRequest(HttpServletRequest request) {
 
 		boolean gtResult = this.validate(
-				request.getParameter("geetest_challenge"),
-				request.getParameter("geetest_validate"),
-				request.getParameter("geetest_seccode"));
+				request.getParameter(this.fn_geetest_challenge),
+				request.getParameter(this.fn_geetest_validate),
+				request.getParameter(this.fn_geetest_seccode));
 
 		return gtResult;
 	}
@@ -494,9 +517,9 @@ public class GeetestLib {
 			return "fail";
 		}
 
-		String challenge = request.getParameter("geetest_challenge");
-		String validate = request.getParameter("geetest_validate");
-		String seccode = request.getParameter("geetest_seccode");
+		String challenge = request.getParameter(this.fn_geetest_challenge);
+		String validate = request.getParameter(this.fn_geetest_validate);
+		String seccode = request.getParameter(this.fn_geetest_seccode);
 
 		String host = baseUrl;
 		String path = "/validate.php";
@@ -576,7 +599,9 @@ public class GeetestLib {
 	 * @param message
 	 */
 	public void gtlog(String message) {
-		System.out.println("gtlog: " + message);
+		if (debugCode){
+			System.out.println("gtlog: " + message);
+		}
 	}
 
 	protected boolean checkResultByPrivate(String origin, String validate) {
