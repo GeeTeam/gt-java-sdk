@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.geetest.sdk.java.GeetestConfig;
-import com.geetest.sdk.java.GeetestLib;
+import com.geetest.sdk.java.GeetestMsgLib;
 
 /**
  * 使用Get的方式返回：challenge和capthca_id 此方式以实现前后端完全分离的开发模式 专门实现failback
@@ -28,23 +28,23 @@ public class StartMsgCapthcaServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 
 		// Conifg the parameter of the geetest object
-		GeetestLib gtSdk = new GeetestLib();
-		gtSdk.setCaptchaId(GeetestConfig.getCaptcha_id());
-		gtSdk.setPrivateKey(GeetestConfig.getPrivate_key());
+		GeetestMsgLib gtMsgSdk = new GeetestMsgLib();
+		gtMsgSdk.setCaptchaId(GeetestConfig.getCaptcha_id());
+		gtMsgSdk.setPrivateKey(GeetestConfig.getPrivate_key());
 
-		gtSdk.setGtSession(request);
+		gtMsgSdk.setGtSession(request);
 
 		String resStr = "{}";
 
-		if (gtSdk.preProcess() == 1) {
+		if (gtMsgSdk.preProcess() == 1) {
 			// gt server is in use
-			resStr = gtSdk.getSuccessPreProcessRes();
-			gtSdk.setGtServerStatusSession(request, 1);
+			resStr = gtMsgSdk.getSuccessPreProcessRes();
+			gtMsgSdk.setGtServerStatusSession(request, 1);
 
 		} else {
 			// gt server is down
-			resStr = gtSdk.getFailPreProcessRes();
-			gtSdk.setGtServerStatusSession(request, 0);
+			resStr = gtMsgSdk.getFailPreProcessRes();
+			gtMsgSdk.setGtServerStatusSession(request, 0);
 		}
 
 		PrintWriter out = response.getWriter();

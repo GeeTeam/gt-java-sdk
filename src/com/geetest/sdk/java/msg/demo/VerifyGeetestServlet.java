@@ -22,7 +22,7 @@ public class VerifyGeetestServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 
 		// get session to share the object
-		GeetestMsgLib geetest_msg = (GeetestMsgLib)GeetestMsgLib.getGtSession(request);
+		GeetestMsgLib geetest_msg = (GeetestMsgLib)GeetestMsgLib.getGtMsgSession(request);
 		int gt_server_status_code = GeetestLib
 				.getGtServerStatusSession(request);
 
@@ -39,7 +39,7 @@ public class VerifyGeetestServlet extends HttpServlet {
 
 		if (gtResult.equals(GeetestLib.success_res)) {
 			// TODO handle the Success result
-			geetest_msg.sendMsgCodeReq(challenge, validate, seccode, phoneNum);
+			geetest_msg.sendMsgCodeReq(request);
 			
 			PrintWriter out = response.getWriter();
 			out.println(GeetestLib.success_res + ":" + geetest_msg.getVersionInfo());
