@@ -34,7 +34,7 @@
 		<servlet-name>ValidateMsgServlet</servlet-name>
 		<display-name>ValidateMsgServlet</display-name>
 		<description></description>
-		<servlet-class>com.geetest.sdk.java.msg.demo.ValidateMsgServlet</servlet-class>
+		<servlet-class>com.geetest.sdk.java.msg.demo.VerifyMsgServlet</servlet-class>
 	</servlet>
 
 

@@ -6,18 +6,46 @@
 文件描述
 ==========
 
+
+核心SDK库
+---------------------
+
 1. GeetestLib.java
-	极验的JavaSDK库
-#. GeetestConfig.java
-	用户配置文件。此处填写用户自己申请的验证模块ID/KEY
+    提供只带拼图行为验证的功能
+#. GeetestMsgLib.java
+    提供带短信功能打包的完整功能,继承于GeetestLib.java所定义的类
+    
+极验行为验证Demo
+------------------------------------
+
+包名：*com.geetest.sdk.java.web.demo*
+
+
+1. GeetestConfig.java
+	Web用户配置文件。此处填写用户自己申请的验证模块ID/KEY
 #. StartCapthcaServlet.java
-	用户判断极验服务器是否Down机的示例Servlet
+	用户判断极验服务器是否Down机的示例Servlet,页面生成前置处理
 #. VerifyLoginServlet.java
-	调用Sdk的示例Servlet
+	提交验证调用Sdk的示例Servlet
 #. login.jsp
 	行为验证的前端示范页面
+	
+	
+短信和极验行为验证Demo
+-------------------------------------------------
+
+包名：*com.geetest.sdk.java.msg.demo*
+
+1. GeetestMsgConfig.java
+	Web用户配置文件。此处填写用户自己申请的验证模块ID/KEY
+#. StartMsgCapthcaServlet.java
+	用户判断极验服务器是否Down机的示例Servlet,页面生成前置处理
+#. VerifyGeetestServlet.java
+	获取短信前的一次验证逻辑控制
+#. VerifyMsgServlet.java
+	提交短信验证示例Servlet
 #. msg_login.jsp
-	行为验证和短信验证的前端示范页面
+	短信+行为验证的前端示范页面
 #. ./lib/java-json.jar
     Java的json解码包。用户如果有其它包可以在此替换。
 	
@@ -41,7 +69,7 @@
 failback效果展示
 =========================
 
-如果极验服务器出现故障，会全自动切换到备选验证，以确保网站主的正常功能能够进行
+如果极验服务器出现故障，会全自动切换到备选验证，以确保网站主的正常功能能够进行。请有开发能力的网站请务必完成failback后的本地化代码功能，以减少不必要的损失。
 
 正常效果
 -----------------
@@ -63,6 +91,15 @@ Email:dreamzsm@gmail.com
 
 发布日志（由新到旧）
 ===================================
+
+
+3.15.6.18.1
+---------------------------
+
+1. 一些代码重新命名
+#. 更新文档
+
+
 
 
 3.15.6.17.1

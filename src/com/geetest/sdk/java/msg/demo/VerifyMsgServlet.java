@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.geetest.sdk.java.GeetestLib;
 import com.geetest.sdk.java.GeetestMsgLib;
 
 /**
@@ -17,7 +16,7 @@ import com.geetest.sdk.java.GeetestMsgLib;
  * @author zheng
  *
  */
-public class ValidateMsgServlet extends HttpServlet {
+public class VerifyMsgServlet extends HttpServlet {
 
 	/**
 	 * 
@@ -30,14 +29,24 @@ public class ValidateMsgServlet extends HttpServlet {
 		// get session to share the object
 		GeetestMsgLib gtMsg = GeetestMsgLib.getGtMsgSession(request);
 
+		int gt_server_status_code = GeetestMsgLib
+				.getGtServerStatusSession(request);
+
 		int gtResult = -10;
 
-		try {
-			gtResult = gtMsg.validateMsgCode(request);
-			gtMsg.gtlog(String.format("msg validate result:%s", gtResult));
+		if (gt_server_status_code == 1) {
+			try {
+				gtResult = gtMsg.validateMsgCode(request);
+				gtMsg.gtlog(String.format("msg validate result:%s", gtResult));
 
-		} catch (Exception e) {
-			e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			// TODO use you own server system when geetest-server is
+			// down:failback
+			System.out.println("failback:use your own server captcha validate");
+			gtResult = -10;
 		}
 
 		// TODO 二次短信验证结果处理

@@ -45,7 +45,7 @@ body {
 	<script src="http://api.geetest.com/get.php"></script>
 	<div class="wrap">
 		<h1>JavaEE站点安装Demo页面</h1>
-		<form method="post" action="ValidateMsgServlet">
+		<form method="post" action="VerifyMsgServlet">
 			<div class="row">
 				<label for="name">邮箱</label> <input type="text" id="email"
 					name="email" value="geetest@126.com" />
