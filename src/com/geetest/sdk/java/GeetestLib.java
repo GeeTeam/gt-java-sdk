@@ -31,7 +31,7 @@ public class GeetestLib {
 	/**
 	 * SDK版本名称
 	 */
-	protected final String verName = "3.15.6.16.1";
+	protected final String verName = "3.15.6.18.1";
 	protected final String sdkLang = "java";// SD的语言类型
 
 	protected final static String gt_session_key = "geetest";// geetest对象存储的session的key值
