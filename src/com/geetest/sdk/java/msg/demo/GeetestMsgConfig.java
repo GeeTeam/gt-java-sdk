@@ -8,8 +8,8 @@ package com.geetest.sdk.java.msg.demo;
 public class GeetestMsgConfig {
 
 	// TODO: replace the these two string with your own msg-captcha's id/key
-	private static final String captcha_id = "a40fd3b0d712165c5d13e6f747e948d4";
-	private static final String private_key = "0f1a37e33c9ed10dd2e133fe2ae9c459";
+	private static final String captcha_id = "4a0eb5e6f780944308954bc602814a53";
+	private static final String private_key = "03e0d35820a741d74445761c2b6d38c5";
 	
 	
 	public static final String getCaptcha_id() {

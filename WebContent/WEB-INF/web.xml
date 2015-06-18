@@ -31,8 +31,8 @@
 		<servlet-class>com.geetest.sdk.java.msg.demo.VerifyGeetestServlet</servlet-class>
 	</servlet>
 	<servlet>
-		<servlet-name>ValidateMsgServlet</servlet-name>
-		<display-name>ValidateMsgServlet</display-name>
+		<servlet-name>VerifyMsgServlet</servlet-name>
+		<display-name>VerifyMsgServlet</display-name>
 		<description></description>
 		<servlet-class>com.geetest.sdk.java.msg.demo.VerifyMsgServlet</servlet-class>
 	</servlet>
@@ -61,8 +61,8 @@
 
 
 	<servlet-mapping>
-		<servlet-name>ValidateMsgServlet</servlet-name>
-		<url-pattern>/ValidateMsgServlet</url-pattern>
+		<servlet-name>VerifyMsgServlet</servlet-name>
+		<url-pattern>/VerifyMsgServlet</url-pattern>
 	</servlet-mapping>
 
 	<welcome-file-list>

@@ -54,18 +54,17 @@ body {
 				<label for="passwd">密码</label> <input type="password" id="passwd"
 					name="passwd" value="gggggggg" />
 			</div>
-
+				<div class="row">
+					<label for="name">手机</label> <input type="text" name="phone" id="phone" />
+				</div>
 			<div class="row">
 				<div id="div_id_embed"></div>
 
-				<div class="box">
-					<label>手机：</label> <input type="text" name="phone" id="phone" />
-				</div>
 				<br />
 				<div class="box mes-box">
-					<label>短信验证码：</label> <br /> <input type="text" class="mes-input"
+					<label>短信验证</label> <br /> <input type="text" class="mes-input"
 						name="geetest_msg_code" value="" />
-					<button type="button" class="mes-button" onClick="getMsgCode()">获取验证码</button>
+					<button type="button" class="mes-button" onClick="getMsgCode()">获取短信验证码</button>
 				</div>
 
 				<script type="text/javascript">

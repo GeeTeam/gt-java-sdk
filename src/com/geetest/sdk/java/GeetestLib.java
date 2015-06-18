@@ -201,7 +201,7 @@ public class GeetestLib {
 	 * @return
 	 */
 	public static int getGtServerStatusSession(HttpServletRequest request) {
-		return (int) request.getSession().getAttribute(
+		return (Integer) request.getSession().getAttribute(
 				gt_server_status_session_key);
 	}
 
