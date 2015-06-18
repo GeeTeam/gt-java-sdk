@@ -54,14 +54,15 @@ body {
 				<label for="passwd">密码</label> <input type="password" id="passwd"
 					name="passwd" value="gggggggg" />
 			</div>
-				<div class="row">
-					<label for="name">手机</label> <input type="text" name="phone" id="phone" />
-				</div>
+			<div class="row">
+				<label for="name">手机</label> <input type="text" name="phone"
+					id="phone" />
+			</div>
 			<div class="row">
 				<div id="div_id_embed"></div>
 
 				<br />
-				<div class="box mes-box">
+				<div class="box msg-box" id="gt-msg-component">
 					<label>短信验证</label> <br /> <input type="text" class="mes-input"
 						name="geetest_msg_code" value="" />
 					<button type="button" class="mes-button" onClick="getMsgCode()">获取短信验证码</button>
@@ -130,6 +131,8 @@ body {
 												gt_captcha_obj
 														.appendTo("#div_id_embed");
 
+												$("#gt-msg-component").show();
+
 												//Ajax request demo,if you use submit form ,then ignore it 
 												gt_captcha_obj
 														.onSuccess(function() {
@@ -144,6 +147,8 @@ body {
 												$("#div_id_embed")
 														.html(
 																'failback:gt-server is down ,please use your own captcha front');
+
+												$("#gt-msg-component").hide();
 												//document.write('gt-server is down ,please use your own captcha')
 											}
 
