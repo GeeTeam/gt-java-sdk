@@ -7,6 +7,15 @@
 ==========
 
 
+注意：本项目提供的Demo的前端实现方法均是面向PC端的。
+如果需要移动端的canvas功能，请参考canvas的前端文档。
+
+`PC端前端文档 <http://www.geetest.com/docs/sdk/build/html/sections/web_api.html>`_
+
+`canvas前端文档 <http://www.geetest.com/docs/sdk/build/html/sections/common_canvas_front.html>`_
+
+
+
 核心SDK库
 ---------------------
 

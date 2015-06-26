@@ -34,6 +34,10 @@ public class VerifyLoginServlet extends HttpServlet {
 			// TODO use you own system when geetest-server is down:failback
 			System.out.println("failback:use your own server captcha validate");
 			gtResult = "fail";
+			
+			gtResult=geetest.failbackValidateRequest(request);
+			
+			
 		}
 
 

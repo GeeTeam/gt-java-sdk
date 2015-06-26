@@ -37,13 +37,12 @@ body {
 </style>
 
 <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
-
+<script src="http://api.geetest.com/get.php"></script>
 
 </head>
 
 <body>
 
-	<script src="http://api.geetest.com/get.php"></script>
 	<div class="wrap">
 		<h1>JavaEE站点安装Demo页面</h1>
 		<form method="post" action="VerifyLoginServlet">
@@ -69,34 +68,49 @@ body {
 
 				<script type="text/javascript">
 					//get  geetest server status, use the failback solution
+					
+					var  loadGeetest = function(config) {
+						
+						//1. use geetest capthca
+						window.gt_captcha_obj = new window.Geetest({
+							gt : config.gt,
+							challenge : config.challenge,
+							product : 'embed',
+							offline: !config.success
+						});
+
+						gt_captcha_obj.appendTo("#div_id_embed");
+
+						//Ajax request demo,if you use submit form ,then ignore it 
+						gt_captcha_obj.onSuccess(function() {
+							geetest_ajax_results()
+						});
+					}
+										
+					
 					$.ajax({
 						url : "StartCapthcaServlet",
 						type : "get",
 						dataType : 'JSON',
 						success : function(result) {
 							console.log(result);
-							if (result.success) {
-								//1. use geetest capthca
-								window.gt_captcha_obj = new window.Geetest({
-									gt : result.gt,
-									challenge : result.challenge,
-									product : 'embed'
-								});
-
-								gt_captcha_obj.appendTo("#div_id_embed");
-
-								//Ajax request demo,if you use submit form ,then ignore it 
-								gt_captcha_obj.onSuccess(function() {
-									geetest_ajax_results()
-								});
-
-							} else {
-								//failback :use your own captcha template
-								//Geetest Server is down,Please use your own captcha system	in your web page
-								//or use the simple geetest failback solution
-								$("#div_id_embed").html('failback:gt-server is down ,please use your own captcha front');
-								//document.write('gt-server is down ,please use your own captcha')
-							}
+								 if (!window.Geetest) {
+								      var s = document.createElement('script');
+								      s.id = 'gt_lib';
+								      s.src = 'http://static.geetest.com/static/js/geetest.3.0.19.js';
+								      s.charset = 'UTF-8';
+								      s.type = 'text/javascript';
+								      document.getElementsByTagName('head')[0].appendChild(s);
+								      var loaded = false;
+								      s.onload = s.onreadystatechange = function () {
+								        if (!loaded && (!this.readyState || this.readyState === 'loaded' || this.readyState === 'complete')) {
+								          loaded = true;
+								          loadGeetest(result)
+								        }
+								      };
+								      return;
+								    }
+								 loadGeetest(result)
 
 						}
 					})

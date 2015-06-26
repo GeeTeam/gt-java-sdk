@@ -12,6 +12,9 @@ import java.net.Socket;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -31,7 +34,7 @@ public class GeetestLib {
 	/**
 	 * SDK版本名称
 	 */
-	protected final String verName = "3.15.6.18.2";
+	protected final String verName = "3.15.6.24.1";
 	protected final String sdkLang = "java";// SD的语言类型
 
 	protected final static String gt_session_key = "geetest";// geetest对象存储的session的key值
@@ -55,9 +58,9 @@ public class GeetestLib {
 	protected final String fn_geetest_challenge = "geetest_challenge";
 	protected final String fn_geetest_validate = "geetest_validate";
 	protected final String fn_geetest_seccode = "geetest_seccode";
-	
-	protected Boolean debugCode = true;//调试开关，是否输出调试日志
 
+	protected Boolean debugCode = true;// 调试开关，是否输出调试日志
+	protected String validateLogPath = "";// 服务器端保存日志的目录//var/log/，请确保有可读写权限
 
 	/**
 	 * 公钥
@@ -122,8 +125,7 @@ public class GeetestLib {
 	public void setChallengeId(String challengeId) {
 		this.challengeId = challengeId;
 	}
-	
-	
+
 	public final Boolean getDebugCode() {
 		return debugCode;
 	}
@@ -131,7 +133,6 @@ public class GeetestLib {
 	public final void setDebugCode(Boolean debugCode) {
 		this.debugCode = debugCode;
 	}
-
 
 	/**
 	 * 获取版本编号
@@ -143,6 +144,14 @@ public class GeetestLib {
 	 */
 	public String getVersionInfo() {
 		return verName;
+	}
+
+	public String getValidateLogPath() {
+		return validateLogPath;
+	}
+
+	public void setValidateLogPath(String validateLogPath) {
+		this.validateLogPath = validateLogPath;
 	}
 
 	// public void setCaptcha_id(String captcha_id) {
@@ -211,7 +220,18 @@ public class GeetestLib {
 	 * @return
 	 */
 	public String getFailPreProcessRes() {
-		return String.format("{\"success\":%s}", 0);
+		// return String.format("{\"success\":%s}", 0);
+
+		Long rnd1 = Math.round(Math.random() * 100);
+		Long rnd2 = Math.round(Math.random() * 100);
+		String md5Str1 = md5Encode(rnd1 + "");
+		String md5Str2 = md5Encode(rnd2 + "");
+		String challenge = md5Str1 + md5Str2.substring(0, 2);
+		this.setChallengeId(challenge);
+
+		return String.format(
+				"{\"success\":%s,\"gt\":\"%s\",\"challenge\":\"%s\"}", 0,
+				this.getCaptchaId(), this.getChallengeId());
 	}
 
 	/**
@@ -223,6 +243,31 @@ public class GeetestLib {
 		return String.format(
 				"{\"success\":%s,\"gt\":\"%s\",\"challenge\":\"%s\"}", 1,
 				this.getCaptchaId(), this.getChallengeId());
+	}
+
+	/**
+	 * 保存验证的日志，方便后续和极验做一些联调工作,用于可能有前端验证通过，但是后面验证失败的情况
+	 * 
+	 * @param challenge
+	 * @param validate
+	 * @param seccode
+	 * @param gtUser
+	 *            用户页面的cookie标识
+	 * @param sdkResult
+	 */
+	public void saveValidateLog(String challenge, String validate,
+			String seccode, String sdkResult) {
+
+		SimpleDateFormat sDateFormat = new SimpleDateFormat(
+				"yyyy-MM-dd   hh:mm:ss");
+		String date = sDateFormat.format(new java.util.Date());
+
+		String logFormat = String.format(
+				"date:%s,challenge:%s,validate:%s,seccode:%s,sdkResult:%s",
+				date, challenge, validate, seccode, sdkResult);
+
+		gtlog(logFormat);
+
 	}
 
 	public String getPicId() {
@@ -452,9 +497,8 @@ public class GeetestLib {
 		if (gtObj == null) {
 			return true;
 		}
-		
-		if(gtObj.toString().trim().length()==0)
-		{
+
+		if (gtObj.toString().trim().length() == 0) {
 			return true;
 		}
 		// && gtObj.toString().trim().length() > 0
@@ -504,6 +548,113 @@ public class GeetestLib {
 	}
 
 	/**
+	 * failback使用的验证方式
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public String failbackValidateRequest(HttpServletRequest request) {
+
+		gtlog("in failback validate");
+
+		if (!resquestIsLegal(request)) {
+			return "fail";
+		}
+
+		String challenge = request.getParameter(this.fn_geetest_challenge);
+		String validate = request.getParameter(this.fn_geetest_validate);
+		// String seccode = request.getParameter(this.fn_geetest_seccode);
+
+		String[] validateStr = validate.split("_");
+		String encodeAns = validateStr[0];
+		String encodeFullBgImgIndex = validateStr[1];
+		String encodeImgGrpIndex = validateStr[2];
+
+		gtlog(String.format(
+				"encode----challenge:%s--ans:%s,bg_idx:%s,grp_idx:%s",
+				challenge, encodeAns, encodeFullBgImgIndex, encodeImgGrpIndex));
+
+		int decodeAns = decodeResponse(this.getChallengeId(), encodeAns);
+		int dncodeFullBgImgIndex = decodeResponse(this.getChallengeId(),
+				encodeFullBgImgIndex);
+		int dncodeImgGrpIndex = decodeResponse(this.getChallengeId(),
+				encodeImgGrpIndex);
+
+		gtlog(String.format("decode----ans:%s,bg_idx:%s,grp_idx:%s", decodeAns,
+				dncodeFullBgImgIndex, dncodeImgGrpIndex));
+
+		return "fail";
+	}
+
+	/**
+	 * 输入的两位的随机数字
+	 * 
+	 * @param randStr
+	 * @return
+	 */
+	public int decodeRandBase(String challenge) {
+
+		String base = challenge.substring(32, 34);
+		ArrayList<Integer> tempArray = new ArrayList<Integer>();
+
+		for (int i = 0; i < base.length(); i++) {
+			char tempChar = base.charAt(i);
+			Integer tempAscii = (int) (tempChar);
+
+			Integer result = (tempAscii > 57) ? (tempAscii - 87)
+					: (tempAscii - 48);
+
+			tempArray.add(result);
+		}
+
+		int decodeRes = tempArray.get(0) * 36 + tempArray.get(1);
+		return decodeRes;
+
+	}
+
+	/**
+	 * 解码随机参数
+	 * 
+	 * @param encodeStr
+	 * @param challenge
+	 * @return
+	 */
+	public int decodeResponse(String challenge, String string) {
+		if (string.length() > 100) {
+			return 0;
+		}
+
+		int[] shuzi = new int[] { 1, 2, 5, 10, 50 };
+		String chongfu = "";
+		HashMap<String, Integer> key = new HashMap<String, Integer>();
+		int count = 0;
+
+		for (int i = 0; i < challenge.length(); i++) {
+			String item = challenge.charAt(i) + "";
+
+			if (chongfu.contains(item) == true) {
+				continue;
+			} else {
+				int value = shuzi[count % 5];
+				chongfu += item;
+				count++;
+				key.put(item, value);
+			}
+		}
+
+		int res = 0;
+
+		for (int j = 0; j < string.length(); j++) {
+			res += key.get(string.charAt(j) + "");
+		}
+
+		res = res - decodeRandBase(challenge);
+
+		return res;
+
+	}
+
+	/**
 	 * 增强版的验证信息,提供了更多的验证返回结果信息，以让客户服务器端有不同的数据处理。
 	 * 
 	 * @param challenge
@@ -520,6 +671,19 @@ public class GeetestLib {
 		String challenge = request.getParameter(this.fn_geetest_challenge);
 		String validate = request.getParameter(this.fn_geetest_validate);
 		String seccode = request.getParameter(this.fn_geetest_seccode);
+		// String gtuser = "";
+
+		// Cookie[] cookies = request.getCookies();
+		//
+		// if (cookies != null) {
+		// for (int i = 0; i < cookies.length; i++) {
+		// Cookie cookie = cookies[i];
+		// if ("GeeTestUser".equals(cookie.getName())) {
+		// gtuser = cookie.getValue();
+		// gtlog(String.format("GeeTestUser:%s", gtuser));
+		// }
+		// }
+		// }
 
 		String host = baseUrl;
 		String path = "/validate.php";
@@ -543,6 +707,7 @@ public class GeetestLib {
 			}
 
 			response = postValidate(host, path, query, port);
+
 			gtlog("response: " + response);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -599,7 +764,7 @@ public class GeetestLib {
 	 * @param message
 	 */
 	public void gtlog(String message) {
-		if (debugCode){
+		if (debugCode) {
 			System.out.println("gtlog: " + message);
 		}
 	}
