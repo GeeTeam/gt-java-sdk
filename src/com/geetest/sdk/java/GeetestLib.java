@@ -575,19 +575,66 @@ public class GeetestLib {
 				challenge, encodeAns, encodeFullBgImgIndex, encodeImgGrpIndex));
 
 		int decodeAns = decodeResponse(this.getChallengeId(), encodeAns);
-		int dncodeFullBgImgIndex = decodeResponse(this.getChallengeId(),
+		int decodeFullBgImgIndex = decodeResponse(this.getChallengeId(),
 				encodeFullBgImgIndex);
-		int dncodeImgGrpIndex = decodeResponse(this.getChallengeId(),
+		int decodeImgGrpIndex = decodeResponse(this.getChallengeId(),
 				encodeImgGrpIndex);
 
 		gtlog(String.format("decode----ans:%s,bg_idx:%s,grp_idx:%s", decodeAns,
-				dncodeFullBgImgIndex, dncodeImgGrpIndex));
+				decodeFullBgImgIndex, decodeImgGrpIndex));
 
-		return "fail";
+		String validateResult = validateFailImage(decodeAns,
+				decodeFullBgImgIndex, decodeImgGrpIndex);
+
+		return validateResult;
 	}
 
 	/**
-	 * 输入的两位的随机数字
+	 *
+	 * @param ans
+	 * @param full_bg_index
+	 * @param img_grp_index
+	 * @return
+	 */
+	private String validateFailImage(int ans, int full_bg_index,
+			int img_grp_index) {
+		// TODO:
+		final int thread = 3;// 容差值
+
+		String full_bg_name = md5Encode(full_bg_index + "").substring(0, 9);
+		String bg_name = md5Encode(img_grp_index + "").substring(10, 19);
+
+		String answer_decode = "";
+
+		// 通过两个字符串奇数和偶数位拼接产生答案位
+		for (int i = 0; i < 9; i++) {
+			if (i % 2 == 0) {
+				answer_decode += full_bg_name.charAt(i);
+			} else if (i % 2 == 1) {
+				answer_decode += bg_name.charAt(i);
+			} else {
+				gtlog("exception");
+			}
+		}
+
+		String x_decode = answer_decode.substring(4, answer_decode.length());
+
+		int x_int = Integer.valueOf(x_decode, 16);// 16 to 10
+
+		int result = x_int % 200;
+		if (result < 40) {
+			result = 40;
+		}
+
+		if (Math.abs(ans - result) <= thread) {
+			return this.success_res;
+		} else {
+			return this.fail_res;
+		}
+	}
+
+	/**
+	 * 输入的两位的随机数字,解码出偏移量
 	 * 
 	 * @param randStr
 	 * @return
