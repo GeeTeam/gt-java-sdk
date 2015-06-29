@@ -108,6 +108,9 @@ body {
 								          loadGeetest(result)
 								        }
 								      };
+								      
+								      console.log('in failback situation');
+								      
 								      return;
 								    }
 								 loadGeetest(result)
@@ -115,16 +118,9 @@ body {
 						}
 					})
 				</script>
-				<div class="row">
-					<input type="button" value="测试自定义刷接口" onclick="geetest_refresh()" />
-				</div>
 			</div>
 
 			<script type="text/javascript">
-				function geetest_refresh() {
-					console.log("you can use this api in your own js function")
-					gt_captcha_obj.refresh();
-				}
 
 				function geetest_ajax_results() {
 					$.ajax({

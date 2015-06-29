@@ -34,7 +34,7 @@ public class GeetestLib {
 	/**
 	 * SDK版本名称
 	 */
-	protected final String verName = "3.15.6.24.1";
+	protected final String verName = "3.15.6.29.1";
 	protected final String sdkLang = "java";// SD的语言类型
 
 	protected final static String gt_session_key = "geetest";// geetest对象存储的session的key值
@@ -558,7 +558,7 @@ public class GeetestLib {
 		gtlog("in failback validate");
 
 		if (!resquestIsLegal(request)) {
-			return "fail";
+			return GeetestLib.fail_res;
 		}
 
 		String challenge = request.getParameter(this.fn_geetest_challenge);
@@ -598,7 +598,6 @@ public class GeetestLib {
 	 */
 	private String validateFailImage(int ans, int full_bg_index,
 			int img_grp_index) {
-		// TODO:
 		final int thread = 3;// 容差值
 
 		String full_bg_name = md5Encode(full_bg_index + "").substring(0, 9);
@@ -627,9 +626,9 @@ public class GeetestLib {
 		}
 
 		if (Math.abs(ans - result) <= thread) {
-			return this.success_res;
+			return GeetestLib.success_res;
 		} else {
-			return this.fail_res;
+			return GeetestLib.fail_res;
 		}
 	}
 
@@ -712,7 +711,7 @@ public class GeetestLib {
 	public String enhencedValidateRequest(HttpServletRequest request) {
 
 		if (!resquestIsLegal(request)) {
-			return "fail";
+			return GeetestLib.fail_res;
 		}
 
 		String challenge = request.getParameter(this.fn_geetest_challenge);
@@ -746,11 +745,11 @@ public class GeetestLib {
 		gtlog(query);
 		try {
 			if (validate.length() <= 0) {
-				return "fail";
+				return GeetestLib.fail_res;
 			}
 
 			if (!checkResultByPrivate(challenge, validate)) {
-				return "fail";
+				return GeetestLib.fail_res;
 			}
 
 			response = postValidate(host, path, query, port);
@@ -763,7 +762,7 @@ public class GeetestLib {
 		gtlog("md5: " + md5Encode(seccode));
 
 		if (response.equals(md5Encode(seccode))) {
-			return "success";
+			return GeetestLib.success_res;
 		} else {
 			return response;
 		}
