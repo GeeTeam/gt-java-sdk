@@ -9,8 +9,8 @@ package com.geetest.sdk.java.web.demo;
 public class GeetestConfig {
 
 	// TODO: replace the these two string with your own captcha's id/key,the id/key below is just for demo
-	private static final String captcha_id = "4a0eb5e6f780944308954bc602814a53";
-	private static final String private_key = "03e0d35820a741d74445761c2b6d38c5";
+	private static final String captcha_id = "b46d1900d0a894591916ea94ea91bd2c";
+	private static final String private_key = "36fc3fe98530eea08dfc6ce76e3d24c4";
 
 	public static final String getCaptcha_id() {
 		return captcha_id;

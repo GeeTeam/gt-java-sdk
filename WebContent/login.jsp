@@ -97,7 +97,7 @@ body {
 								 if (!window.Geetest) {
 								      var s = document.createElement('script');
 								      s.id = 'gt_lib';
-								      s.src = 'http://static.geetest.com/static/js/geetest.3.0.19.js';
+								      s.src = 'http://static.geetest.com/static/js/geetest.0.0.0.js';
 								      s.charset = 'UTF-8';
 								      s.type = 'text/javascript';
 								      document.getElementsByTagName('head')[0].appendChild(s);
