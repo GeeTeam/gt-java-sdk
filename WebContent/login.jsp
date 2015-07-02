@@ -37,7 +37,6 @@ body {
 </style>
 
 <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
-<script src="http://api.geetest.com/get.php"></script>
 
 </head>
 
@@ -57,6 +56,7 @@ body {
 
 			<%--Start  Code--%>
 			<div class="row">
+				<div id="div_geetest_lib"></div>
 				<div id="div_id_embed"></div>
 
 				<%--End  Code--%>
@@ -67,16 +67,55 @@ body {
 				</div>
 
 				<script type="text/javascript">
+					var gtFailbackFrontInitial = function(result) {
+						var s = document.createElement('script');
+						s.id = 'gt_lib';
+						s.src = 'http://static.geetest.com/static/js/geetest.0.0.0.js';
+						s.charset = 'UTF-8';
+						s.type = 'text/javascript';
+						document.getElementsByTagName('head')[0].appendChild(s);
+						var 
+					loaded = false;
+						s.onload = s.onreadystatechange = function() {
+							if (!loaded
+									&& (!this.readyState
+											|| this.readyState === 'loaded' || this.readyState === 'complete')) {
+								loadGeetest(result);
+								loaded = true;
+							}
+						};
+					}
+				</script>
+
+
+				<script type="text/javascript">
 					//get  geetest server status, use the failback solution
-					
-					var  loadGeetest = function(config) {
-						
+
+					function geetest_load_callback() {
+						loadGeetest(result);
+						console.log('do something after geetest loaded')
+					}
+
+					function geetest_ajax_results() {
+						//TODO,a geetest ajax demo,not necessory
+						$.ajax({
+							url : "/todo/VerifyLoginServlet",//todo:set the servelet of your own
+							type : "post",
+							data : gt_captcha_obj.getValidate(),
+							success : function(sdk_result) {
+								console.log(sdk_result)
+							}
+						});
+					}
+
+					var loadGeetest = function(config) {
+
 						//1. use geetest capthca
 						window.gt_captcha_obj = new window.Geetest({
 							gt : config.gt,
 							challenge : config.challenge,
 							product : 'embed',
-							offline: !config.success
+							offline : !config.success
 						});
 
 						gt_captcha_obj.appendTo("#div_id_embed");
@@ -86,53 +125,37 @@ body {
 							geetest_ajax_results()
 						});
 					}
-										
-					
-					$.ajax({
-						url : "StartCapthcaServlet",
-						type : "get",
-						dataType : 'JSON',
-						success : function(result) {
-							console.log(result);
-								 if (!window.Geetest) {
-								      var s = document.createElement('script');
-								      s.id = 'gt_lib';
-								      s.src = 'http://static.geetest.com/static/js/geetest.0.0.0.js';
-								      s.charset = 'UTF-8';
-								      s.type = 'text/javascript';
-								      document.getElementsByTagName('head')[0].appendChild(s);
-								      var loaded = false;
-								      s.onload = s.onreadystatechange = function () {
-								        if (!loaded && (!this.readyState || this.readyState === 'loaded' || this.readyState === 'complete')) {
-								          loaded = true;
-								          loadGeetest(result)
-								        }
-								      };
-								      
-								      console.log('in failback situation');
-								      
-								      return;
-								    }
-								 loadGeetest(result)
 
-						}
-					})
+					$
+							.ajax({
+								url : "StartCapthcaServlet",
+								type : "get",
+								dataType : 'JSON',
+								success : function(result) {
+									window.result = result//if you use multi-instance,set another global name
+									if (!result.success) {
+
+										console.log('in failback situation');
+										gtFailbackFrontInitial(result);
+
+									} else {
+										s = document.createElement('script');
+										s.src = 'http://api.geetest.com/get.php?callback=geetest_load_callback';
+										$("#div_geetest_lib").append(s)
+										setTimeout(
+												function() {
+													window.geetest_load_callback = function() {
+														//drop the default geetest callback if timeout
+														return;
+													}
+												}, 1000)
+									}
+								}
+							})
 				</script>
 			</div>
 
-			<script type="text/javascript">
 
-				function geetest_ajax_results() {
-					$.ajax({
-						url : "/todo/VerifyLoginServlet",//todo:set the servelet of your own
-						type : "post",
-						data : gt_captcha_obj.getValidate(),
-						success : function(sdk_result) {
-							console.log(sdk_result)
-						}
-					});
-				}
-			</script>
 
 		</form>
 	</div>
