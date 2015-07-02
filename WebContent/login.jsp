@@ -67,6 +67,21 @@ body {
 				</div>
 
 				<script type="text/javascript">
+				
+
+				function geetest_ajax_results() {
+					//TODO, not necessory a geetest ajax demo,
+					$.ajax({
+						url : "/todo/VerifyLoginServlet",//todo:set the servelet of your own
+						type : "post",
+						data : gt_captcha_obj.getValidate(),
+						success : function(sdk_result) {
+							console.log(sdk_result)
+						}
+					});
+				}
+				
+				
 					var gtFailbackFrontInitial = function(result) {
 						var s = document.createElement('script');
 						s.id = 'gt_lib';
@@ -85,28 +100,8 @@ body {
 							}
 						};
 					}
-				</script>
-
-
-				<script type="text/javascript">
 					//get  geetest server status, use the failback solution
 
-					function geetest_load_callback() {
-						loadGeetest(result);
-						console.log('do something after geetest loaded')
-					}
-
-					function geetest_ajax_results() {
-						//TODO,a geetest ajax demo,not necessory
-						$.ajax({
-							url : "/todo/VerifyLoginServlet",//todo:set the servelet of your own
-							type : "post",
-							data : gt_captcha_obj.getValidate(),
-							success : function(sdk_result) {
-								console.log(sdk_result)
-							}
-						});
-					}
 
 					var loadGeetest = function(config) {
 
@@ -126,30 +121,38 @@ body {
 						});
 					}
 
-					$
-							.ajax({
+					s = document.createElement('script');
+					s.src = 'http://api.geetest.com/get.php?callback=gtcallback';
+					$("#div_geetest_lib").append(s);
+					
+					var gtcallback =( function() {
+						var status = 0, result, apiFail;
+						return function(r) {
+							status += 1;
+							if (r) {
+								result = r;
+								setTimeout(function() {
+									if (!window.Geetest) {
+										apiFail = true;
+										gtFailbackFrontInitial(result)
+									}
+								}, 1000)
+							}
+							else if(apiFail) {
+								return
+							}
+							if (status == 2) {
+								loadGeetest(result);
+							}
+						}
+					})()
+					
+					$.ajax({
 								url : "StartCapthcaServlet",
 								type : "get",
 								dataType : 'JSON',
 								success : function(result) {
-									window.result = result//if you use multi-instance,set another global name
-									if (!result.success) {
-
-										console.log('in failback situation');
-										gtFailbackFrontInitial(result);
-
-									} else {
-										s = document.createElement('script');
-										s.src = 'http://api.geetest.com/get.php?callback=geetest_load_callback';
-										$("#div_geetest_lib").append(s)
-										setTimeout(
-												function() {
-													window.geetest_load_callback = function() {
-														//drop the default geetest callback if timeout
-														return;
-													}
-												}, 1000)
-									}
+									gtcallback(result)
 								}
 							})
 				</script>
