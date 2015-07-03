@@ -34,7 +34,7 @@ public class GeetestLib {
 	/**
 	 * SDK版本名称
 	 */
-	protected final String verName = "2.15.7.2.3";
+	protected final String verName = "2.15.7.3.1";
 	protected final String sdkLang = "java";// SD的语言类型
 
 	protected final static String gt_session_key = "geetest";// geetest对象存储的session的key值
@@ -564,6 +564,13 @@ public class GeetestLib {
 		String challenge = request.getParameter(this.fn_geetest_challenge);
 		String validate = request.getParameter(this.fn_geetest_validate);
 		// String seccode = request.getParameter(this.fn_geetest_seccode);
+		
+		
+		if(! challenge.equals(this.getChallengeId()))
+		{
+			return GeetestLib.fail_res;
+		}
+		
 
 		String[] validateStr = validate.split("_");
 		String encodeAns = validateStr[0];
@@ -582,9 +589,18 @@ public class GeetestLib {
 
 		gtlog(String.format("decode----ans:%s,bg_idx:%s,grp_idx:%s", decodeAns,
 				decodeFullBgImgIndex, decodeImgGrpIndex));
-
+		
+	
 		String validateResult = validateFailImage(decodeAns,
 				decodeFullBgImgIndex, decodeImgGrpIndex);
+		
+		if (!validateResult.equals(GeetestLib.fail_res))
+		{
+			//使用一随机标识来丢弃掉此次验证，防止重放
+			Long rnd1 = Math.round(Math.random() * 100);
+			String md5Str1 = md5Encode(rnd1 + "");
+			this.setChallengeId(md5Str1);
+		}		
 
 		return validateResult;
 	}
