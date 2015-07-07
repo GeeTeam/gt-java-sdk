@@ -79,7 +79,7 @@
 1. 从GitHub中clone一份到本地
 #. 使用Eclipse直接import一个项目
 #. 打开tomcat
-#. 在浏览器中访问http://localhost:8080/GtJavaSdkDemo/Login.jsp即可看到Demo界面
+#. 在浏览器中访问http://localhost:8080/gt-java-sdk/login.jsp即可看到Demo界面
 
 
 failback效果展示
@@ -107,6 +107,8 @@ Email:dreamzsm@gmail.com
 
 发布日志（由新到旧）
 ===================================
+
+
 
 2.15.7.3.1
 --------------------
