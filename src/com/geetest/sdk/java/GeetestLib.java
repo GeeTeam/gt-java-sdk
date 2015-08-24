@@ -47,7 +47,7 @@ public class GeetestLib {
 
 	protected final int defaultIsMobile = 0;
 	// private final int defaultMobileWidth = 260;// the default width of the
-	// mobile capthca
+	// mobile id
 
 	// 一些常量
 	public static final String success_res = "success";

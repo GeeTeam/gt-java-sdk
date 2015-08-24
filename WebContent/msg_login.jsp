@@ -114,7 +114,7 @@ body {
 					$
 							.ajax(
 									{
-										url : "StartMsgCapthcaServlet",
+										url : "StartMsgCaptchaServlet",
 										type : "get",
 										dataType : 'JSON',
 										success : function(result) {

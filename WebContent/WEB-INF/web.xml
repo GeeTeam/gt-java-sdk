@@ -4,10 +4,10 @@
 	<display-name>GtJavaSdkDemo</display-name>
 
 	<servlet>
-		<servlet-name>StartCapthcaServlet</servlet-name>
-		<display-name>StartCapthcaServlet</display-name>
+		<servlet-name>StartCaptchaServlet</servlet-name>
+		<display-name>StartCaptchaServlet</display-name>
 		<description></description>
-		<servlet-class>com.geetest.sdk.java.web.demo.StartCapthcaServlet</servlet-class>
+		<servlet-class>com.geetest.sdk.java.web.demo.StartCaptchaServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<servlet-name>VerifyLoginServlet</servlet-name>
@@ -19,10 +19,10 @@
 
 
 	<servlet>
-		<servlet-name>StartMsgCapthcaServlet</servlet-name>
-		<display-name>StartMsgCapthcaServlet</display-name>
+		<servlet-name>StartMsgCaptchaServlet</servlet-name>
+		<display-name>StartMsgCaptchaServlet</display-name>
 		<description></description>
-		<servlet-class>com.geetest.sdk.java.msg.demo.StartMsgCapthcaServlet</servlet-class>
+		<servlet-class>com.geetest.sdk.java.msg.demo.StartMsgCaptchaServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<servlet-name>VerifyGeetestServlet</servlet-name>
@@ -45,14 +45,14 @@
 		<url-pattern>/VerifyLoginServlet</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>StartCapthcaServlet</servlet-name>
-		<url-pattern>/StartCapthcaServlet</url-pattern>
+		<servlet-name>StartCaptchaServlet</servlet-name>
+		<url-pattern>/StartCaptchaServlet</url-pattern>
 	</servlet-mapping>
 
 
 	<servlet-mapping>
-		<servlet-name>StartMsgCapthcaServlet</servlet-name>
-		<url-pattern>/StartMsgCapthcaServlet</url-pattern>
+		<servlet-name>StartMsgCaptchaServlet</servlet-name>
+		<url-pattern>/StartMsgCaptchaServlet</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>VerifyGeetestServlet</servlet-name>

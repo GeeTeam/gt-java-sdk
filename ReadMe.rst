@@ -10,9 +10,7 @@
 注意：本项目提供的Demo的前端实现方法均是面向PC端的。
 如果需要移动端的canvas功能，请参考canvas的前端文档。
 
-`PC端前端文档 <http://www.geetest.com/docs/sdk/build/html/sections/web_api.html>`_
 
-`canvas前端文档 <http://www.geetest.com/docs/sdk/build/html/sections/common_canvas_front.html>`_
 
 
 
@@ -32,7 +30,7 @@
 
 1. GeetestConfig.java
 	Web用户配置文件。此处填写用户自己申请的验证模块ID/KEY
-#. StartCapthcaServlet.java
+#. StartCaptchaServlet.java
 	用户判断极验服务器是否Down机的示例Servlet,页面生成前置处理
 #. VerifyLoginServlet.java
 	提交验证调用Sdk的示例Servlet
@@ -54,7 +52,7 @@
 
 1. GeetestMsgConfig.java
 	Web用户配置文件。此处填写用户自己申请的验证模块ID/KEY
-#. StartMsgCapthcaServlet.java
+#. StartMsgCaptchaServlet.java
 	用户判断极验服务器是否Down机的示例Servlet,页面生成前置处理
 #. VerifyGeetestServlet.java
 	获取短信前的一次验证逻辑控制
@@ -107,6 +105,12 @@ Email:dreamzsm@gmail.com
 
 发布日志（由新到旧）
 ===================================
+
+
+2.15.8.24.1
+--------------------
+
+- 规范和修改函数的命名的名称
 
 
 

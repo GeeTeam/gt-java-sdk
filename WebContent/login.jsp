@@ -105,7 +105,7 @@ body {
 
 					var loadGeetest = function(config) {
 
-						//1. use geetest capthca
+						//1. use geetest captcha
 						window.gt_captcha_obj = new window.Geetest({
 							gt : config.gt,
 							challenge : config.challenge,
@@ -148,7 +148,7 @@ body {
 					})()
 					
 					$.ajax({
-								url : "StartCapthcaServlet",
+								url : "StartCaptchaServlet",
 								type : "get",
 								dataType : 'JSON',
 								success : function(result) {
