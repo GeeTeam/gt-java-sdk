@@ -831,8 +831,8 @@ public class GeetestLib {
 		}
 	}
 
-	protected boolean checkResultByPrivate(String origin, String validate) {
-		String encodeStr = md5Encode(privateKey + "geetest" + origin);
+	protected boolean checkResultByPrivate(String challenge, String validate) {
+		String encodeStr = md5Encode(privateKey + "geetest" + challenge);
 		return validate.equals(encodeStr);
 	}
 
