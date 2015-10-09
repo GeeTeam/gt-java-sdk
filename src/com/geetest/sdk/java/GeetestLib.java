@@ -34,11 +34,11 @@ public class GeetestLib {
 	/**
 	 * SDK版本名称
 	 */
-	protected final String verName = "2.15.7.3.1";
+	protected final String verName = "2.15.10.9.1";
 	protected final String sdkLang = "java";// SD的语言类型
 
-	protected final static String gt_session_key = "geetest";// geetest对象存储的session的key值
-	protected final static String gt_server_status_session_key = "gt_server_status";// 极验服务器状态key值
+	protected final static String gt_session_key = "geetest";// geetest对象存储的session的key值(单实例)
+	protected final static String gt_server_status_session_key = "gt_server_status";// 极验服务器状态key值（单实例）
 
 	protected final String baseUrl = "api.geetest.com";
 	protected final String api_url = "http://" + baseUrl;
@@ -183,6 +183,20 @@ public class GeetestLib {
 	}
 
 	/**
+	 * 同一会话多实例时，设置session
+	 * 
+	 * @param request
+	 * @param gt_instance_session_key
+	 *            不同验证实例设置的key
+	 */
+	public void setGtSession(HttpServletRequest request,
+			String gt_instance_session_key) {
+		request.getSession().setAttribute(gt_instance_session_key, this);// set
+																			// session
+		this.gtlog("set session succeed");
+	}
+
+	/**
 	 * 极验服务器的gt-server状态值
 	 * 
 	 * @param request
@@ -191,6 +205,20 @@ public class GeetestLib {
 			int statusCode) {
 		request.getSession().setAttribute(gt_server_status_session_key,
 				statusCode);// set session
+	}
+
+	/**
+	 * 极验服务器的gt-server状态值（多实例）
+	 * 
+	 * @param request
+	 * @param statusCode
+	 * @param gt_instance_server_status_session_key
+	 */
+	public void setGtServerStatusSession(HttpServletRequest request,
+			int statusCode, String gt_instance_server_status_session_key) {
+		request.getSession().setAttribute(
+				gt_instance_server_status_session_key, statusCode);// set
+																	// session
 	}
 
 	/**
@@ -204,6 +232,19 @@ public class GeetestLib {
 	}
 
 	/**
+	 * 获取session(用于同一会话多实例模式下，做的区分)
+	 * 
+	 * @param request
+	 * @param gt_instance_session_key
+	 * @return
+	 */
+	public static GeetestLib getGtSession(HttpServletRequest request,
+			String gt_instance_session_key) {
+		return (GeetestLib) request.getSession().getAttribute(
+				gt_instance_session_key);
+	}
+
+	/**
 	 * 0表示不正常，1表示正常
 	 * 
 	 * @param request
@@ -212,6 +253,19 @@ public class GeetestLib {
 	public static int getGtServerStatusSession(HttpServletRequest request) {
 		return (Integer) request.getSession().getAttribute(
 				gt_server_status_session_key);
+	}
+
+	/**
+	 * 获取session(用于同一会话多实例模式下，做的区分)
+	 * 
+	 * @param request
+	 * @param gt_instance_server_status_session_key
+	 * @return
+	 */
+	public static int getGtServerStatusSession(HttpServletRequest request,
+			String gt_instance_server_status_session_key) {
+		return (Integer) request.getSession().getAttribute(
+				gt_instance_server_status_session_key);
 	}
 
 	/**
@@ -564,13 +618,10 @@ public class GeetestLib {
 		String challenge = request.getParameter(this.fn_geetest_challenge);
 		String validate = request.getParameter(this.fn_geetest_validate);
 		// String seccode = request.getParameter(this.fn_geetest_seccode);
-		
-		
-		if(! challenge.equals(this.getChallengeId()))
-		{
+
+		if (!challenge.equals(this.getChallengeId())) {
 			return GeetestLib.fail_res;
 		}
-		
 
 		String[] validateStr = validate.split("_");
 		String encodeAns = validateStr[0];
@@ -589,18 +640,16 @@ public class GeetestLib {
 
 		gtlog(String.format("decode----ans:%s,bg_idx:%s,grp_idx:%s", decodeAns,
 				decodeFullBgImgIndex, decodeImgGrpIndex));
-		
-	
+
 		String validateResult = validateFailImage(decodeAns,
 				decodeFullBgImgIndex, decodeImgGrpIndex);
-		
-		if (!validateResult.equals(GeetestLib.fail_res))
-		{
-			//使用一随机标识来丢弃掉此次验证，防止重放
+
+		if (!validateResult.equals(GeetestLib.fail_res)) {
+			// 使用一随机标识来丢弃掉此次验证，防止重放
 			Long rnd1 = Math.round(Math.random() * 100);
 			String md5Str1 = md5Encode(rnd1 + "");
 			this.setChallengeId(md5Str1);
-		}		
+		}
 
 		return validateResult;
 	}

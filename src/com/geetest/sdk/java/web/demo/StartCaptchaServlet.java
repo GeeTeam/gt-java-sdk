@@ -31,7 +31,7 @@ public class StartCaptchaServlet extends HttpServlet {
 		gtSdk.setCaptchaId(GeetestConfig.getCaptcha_id());
 		gtSdk.setPrivateKey(GeetestConfig.getPrivate_key());
 
-		gtSdk.setGtSession(request);
+		gtSdk.setGtSession(request);//如果是同一会话多实例，可以使用此函数的另一重载实现式，设置不同的key即可
 
 		String resStr = "{}";
 
