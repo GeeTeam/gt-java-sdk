@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.print.DocFlavor.STRING;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -34,10 +35,10 @@ public class GeetestLib {
 	/**
 	 * SDK版本名称
 	 */
-	protected final String verName = "2.15.12.10.1";
+	protected final String verName = "2.0.0";
 	protected final String sdkLang = "java";// SD的语言类型
 
-	protected final static String gt_session_key = "geetest";// geetest对象存储的session的key值(单实例)
+	protected final static String gt_challenge_session_key = "geetest_challenge";// challenge的key值(单实例)
 	protected final static String gt_server_status_session_key = "gt_server_status";// 极验服务器状态key值（单实例）
 
 	protected final String baseUrl = "api.geetest.com";
@@ -78,11 +79,6 @@ public class GeetestLib {
 	private String challengeId = "";
 
 	/**
-	 * set the own private pictures,default is ""
-	 */
-	private String picId = "";
-
-	/**
 	 * he captcha product type,default is 'embed'
 	 */
 	private String productType = "embed";
@@ -117,13 +113,11 @@ public class GeetestLib {
 	 * 是否是移动端的
 	 */
 	private int isMobile = defaultIsMobile;// 1--true,0-false
-
-	public String getChallengeId() {
-		return challengeId;
-	}
-
-	public void setChallengeId(String challengeId) {
-		this.challengeId = challengeId;
+	
+	/**
+	 * 无参构造函数
+	 */
+	public GeetestLib() {
 	}
 
 	public final Boolean getDebugCode() {
@@ -133,73 +127,82 @@ public class GeetestLib {
 	public final void setDebugCode(Boolean debugCode) {
 		this.debugCode = debugCode;
 	}
+	
+	public String getChallengeId() {
+		return challengeId;
+	}
+
+	public void setChallengeId(String challengeId) {
+		this.challengeId = challengeId;
+	}
+	
+
+	public String getProductType() {
+		return productType;
+	}
+
+	public void setProductType(String productType) {
+		this.productType = productType;
+	}
+
+	public int getIsMobile() {
+		return isMobile;
+	}
+
+	public void setIsMobile(int isMobile) {
+		this.isMobile = isMobile;
+	}
+
+	public String getPrivateKey() {
+		return privateKey;
+	}
+
+	public void setPrivateKey(String privateKey) {
+		this.privateKey = privateKey;
+	}
+
+	public GeetestLib(String privateKey) {
+		this.privateKey = privateKey;
+	}
+
+	public String getVerName() {
+		return verName;
+	}
+
+	public String getCaptchaId() {
+		return captchaId;
+	}
+
+	public void setCaptchaId(String captchaId) {
+		this.captchaId = captchaId;
+	}
 
 	/**
 	 * 获取版本编号
-	 * 
-	 * @author Zheng
-	 * @email dreamzsm@gmail.com
-	 * @time 2014年7月11日 上午11:07:11
-	 * @return
 	 */
 	public String getVersionInfo() {
 		return verName;
 	}
 
+	/**
+	 * 设置服务器端保存日志的目录
+	 */
+	public void setValidateLogPath(String validateLogPath) {
+		this.validateLogPath = validateLogPath;
+	}
+	
+	/**
+	 * 获取服务器端保存日志的目录
+	 */
 	public String getValidateLogPath() {
 		return validateLogPath;
 	}
 
-	public void setValidateLogPath(String validateLogPath) {
-		this.validateLogPath = validateLogPath;
-	}
-
-	// public void setCaptcha_id(String captcha_id) {
-	// this.captcha_id = captcha_id;
-	// }
-
 	/**
-	 * 一个无参构造函数
-	 */
-	public GeetestLib() {
-	}
-
-	// public static GeetestLib createGtInstance() {
-	// GeetestLib geetestSdk = new GeetestLib();
-	// geetestSdk.setCaptchaId(GeetestConfig.getCaptcha_id());
-	// geetestSdk.setPrivateKey(GeetestConfig.getPrivate_key());
-	//
-	// return geetestSdk;
-	// }
-
-	/**
-	 * 将当前实例设置到session中
+	 * 设置极验服务器的gt-server状态值
 	 * 
 	 * @param request
-	 */
-	public void setGtSession(HttpServletRequest request) {
-		request.getSession().setAttribute(gt_session_key, this);// set session
-		this.gtlog("set session succeed");
-	}
-
-	/**
-	 * 同一会话多实例时，设置session
-	 * 
-	 * @param request
-	 * @param gt_instance_session_key
-	 *            不同验证实例设置的key
-	 */
-	public void setGtSession(HttpServletRequest request,
-			String gt_instance_session_key) {
-		request.getSession().setAttribute(gt_instance_session_key, this);// set
-																			// session
-		this.gtlog("set session succeed");
-	}
-
-	/**
-	 * 极验服务器的gt-server状态值
-	 * 
-	 * @param request
+	 * @param statusCode
 	 */
 	public void setGtServerStatusSession(HttpServletRequest request,
 			int statusCode) {
@@ -208,7 +211,7 @@ public class GeetestLib {
 	}
 
 	/**
-	 * 极验服务器的gt-server状态值（多实例）
+	 * 设置极验服务器的gt-server状态值（用于同一会话多实例模式下）
 	 * 
 	 * @param request
 	 * @param statusCode
@@ -222,33 +225,10 @@ public class GeetestLib {
 	}
 
 	/**
-	 * 获取session
+	 * 获取极验服务器的gt-server状态值
 	 * 
 	 * @param request
-	 * @return
-	 */
-	public static GeetestLib getGtSession(HttpServletRequest request) {
-		return (GeetestLib) request.getSession().getAttribute(gt_session_key);
-	}
-
-	/**
-	 * 获取session(用于同一会话多实例模式下，做的区分)
-	 * 
-	 * @param request
-	 * @param gt_instance_session_key
-	 * @return
-	 */
-	public static GeetestLib getGtSession(HttpServletRequest request,
-			String gt_instance_session_key) {
-		return (GeetestLib) request.getSession().getAttribute(
-				gt_instance_session_key);
-	}
-
-	/**
-	 * 0表示不正常，1表示正常，2表示本次请求没有按照流程来请求，直接不予理会
-	 * 
-	 * @param request
-	 * @return
+	 * @return 0表示不正常，1表示正常，2表示本次请求没有按照流程来请求，直接不予理会
 	 */
 	public static int getGtServerStatusSession(HttpServletRequest request) {
 
@@ -262,11 +242,11 @@ public class GeetestLib {
 	}
 
 	/**
-	 * 获取session(用于同一会话多实例模式下，做的区分)
+	 * 获取极验服务器的gt-server状态值(用于同一会话多实例模式下)
 	 * 
 	 * @param request
 	 * @param gt_instance_server_status_session_key
-	 * @return
+	 * @return 0表示不正常，1表示正常，2表示本次请求没有按照流程来请求，直接不予理会
 	 */
 	public static int getGtServerStatusSession(HttpServletRequest request,
 			String gt_instance_server_status_session_key) {
@@ -279,6 +259,49 @@ public class GeetestLib {
 		}
 
 		return (Integer) server_status;
+	}
+	
+	/**
+	 * 设置本次验证的challenge
+	 * 
+	 * @param request
+	 */
+	public void setChallengeSession(HttpServletRequest request) {
+		request.getSession().setAttribute(gt_challenge_session_key,
+				this.challengeId);
+	}
+	
+	/**
+	 * 设置本次验证的challenge(用于同一会话多实例模式下)
+	 * 
+	 * @param request
+	 */
+	public void setGtServerStatusSession(HttpServletRequest request,
+			String gt_instance_server_status_session_key) {
+		request.getSession().setAttribute(gt_instance_server_status_session_key,
+				this.challengeId);
+	}
+	
+	/**
+	 * 获取本次验证的challenge
+	 * 
+	 * @param request
+	 */
+	public void getChallengeSession(HttpServletRequest request) {
+		this.challengeId = (String)request.getSession().getAttribute(
+				gt_challenge_session_key);
+	}
+	
+	/**
+	 * 获取本次验证的challenge(用于同一会话多实例模式下)
+	 * 
+	 * @param request
+	 * @param gt_instance_server_status_session_key
+	 */
+	public void getChallengeSession(HttpServletRequest request,
+			String gt_instance_server_status_session_key) {
+		this.challengeId = (String)request.getSession().getAttribute(
+				gt_instance_server_status_session_key);
 	}
 
 	/**
@@ -318,8 +341,7 @@ public class GeetestLib {
 	 * @param challenge
 	 * @param validate
 	 * @param seccode
-	 * @param gtUser
-	 *            用户页面的cookie标识
+	 * @param gtUser 用户页面的cookie标识
 	 * @param sdkResult
 	 */
 	public void saveValidateLog(String challenge, String validate,
@@ -337,76 +359,13 @@ public class GeetestLib {
 
 	}
 
-	public String getPicId() {
-		return picId;
-	}
-
-	public void setPicId(String picId) {
-		this.picId = picId;
-	}
-
-	public String getProductType() {
-		return productType;
-	}
-
-	public void setProductType(String productType) {
-		this.productType = productType;
-	}
-
-	public int getIsMobile() {
-		return isMobile;
-	}
-
-	public void setIsMobile(int isMobile) {
-		this.isMobile = isMobile;
-	}
-
-	public String getPrivateKey() {
-		return privateKey;
-	}
-
-	public void setPrivateKey(String privateKey) {
-		this.privateKey = privateKey;
-	}
-
-	public GeetestLib(String privateKey) {
-		this.privateKey = privateKey;
-	}
-
-	// public GeetestLib(String privateKey, String captcha_id) {
-	// this.privateKey = privateKey;
-	// this.captcha_id = captcha_id;
-	// }
-
-	// public int getVerCode() {
-	// return verCode;
-	// }
-
-	public String getVerName() {
-		return verName;
-	}
-
-	public String getCaptchaId() {
-		return captchaId;
-	}
-
-	public void setCaptchaId(String captchaId) {
-		this.captchaId = captchaId;
-	}
-
 	/**
-	 * processing before the captcha display on the web front
-	 * 
+	 * 验证初始化预处理
+	 *
 	 * @return
 	 */
 	public int preProcess() {
 
-		// first check the server status , to handle failback
-		// if (getGtServerStatus() != 1) {
-		// return 0;
-		// }
-
-		// just check the server side register
 		if (registerChallenge() != 1) {
 			return 0;
 		}
@@ -415,68 +374,6 @@ public class GeetestLib {
 
 	}
 
-	/**
-	 * generate the dynamic front source
-	 * 
-	 * @param different
-	 *            product display mode :float,embed,popup
-	 * @return
-	 */
-	public String getGtFrontSource() {
-
-		String base_path = "";
-		if (this.isHttps) {
-			base_path = this.https_api_url;
-		} else {
-			base_path = this.api_url;
-		}
-
-		String frontSource = String.format(
-				"<script type=\"text/javascript\" src=\"%s/get.php?"
-						+ "gt=%s&challenge=%s", base_path, this.captchaId,
-				this.challengeId);
-
-		if (this.productType.equals("popup")) {
-			frontSource += String.format("&product=%s&popupbtnid=%s",
-					this.productType, this.submitBtnId);
-		} else {
-			frontSource += String.format("&product=%s", this.productType);
-		}
-
-		frontSource += "\"></script>";
-
-		return frontSource;
-	}
-
-	/**
-	 * 获取极验的服务器状态
-	 * 
-	 * @author Zheng
-	 * @email dreamzsm@gmail.com
-	 * @time 2014年7月10日 下午7:12:38
-	 * @return
-	 */
-	public int getGtServerStatus() {
-
-		try {
-			final String GET_URL = api_url + "/check_status.php";
-			if (readContentFromGet(GET_URL).equals("ok")) {
-				return 1;
-			} else {
-				System.out.println("gServer is Down");
-				return 0;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return 0;
-	}
-
-	/**
-	 * generate a random num
-	 * 
-	 * @return
-	 */
 	public int getRandomNum() {
 
 		int rand_num = (int) (Math.random() * 100);
@@ -485,24 +382,15 @@ public class GeetestLib {
 	}
 
 	/**
-	 * Register the challenge
+	 * 用captchaID进行注册，更新challenge
 	 * 
-	 * @return
+	 * @return 1表示注册成功，0表示注册失败
 	 */
-	public int registerChallenge() {
+	private int registerChallenge() {
 		try {
 			String GET_URL = api_url + "/register.php?gt=" + this.captchaId;
-
-			// if (this.productType.equals("popup")) {
-			// GET_URL += String.format("&product=%s&popupbtnid=%s",
-			// this.productType, this.submitBtnId);
-			// } else {
-			// GET_URL += String.format("&product=%s", this.productType);
-			// }
-
-			// System.out.print(GET_URL);
 			String result_str = readContentFromGet(GET_URL);
-			// System.out.println(result_str);
+			System.out.println(result_str);
 			if (32 == result_str.length()) {
 				this.challengeId = result_str;
 				return 1;
@@ -518,12 +406,10 @@ public class GeetestLib {
 	}
 
 	/**
-	 * 读取服务器
+	 * 发送请求，获取服务器返回结果
 	 * 
-	 * @author Zheng dreamzsm@gmail.com
-	 * @time 2014年7月10日 下午7:11:11
 	 * @param getURL
-	 * @return
+	 * @return 服务器返回结果
 	 * @throws IOException
 	 */
 	private String readContentFromGet(String getURL) throws IOException {
@@ -536,8 +422,8 @@ public class GeetestLib {
 		connection.setReadTimeout(2000);// 设置从主机读取数据超时（单位：毫秒）
 
 		// 建立与服务器的连接，并未发送数据
-
 		connection.connect();
+		
 		// 发送数据到服务器并使用Reader读取返回的数据
 		StringBuffer sBuffer = new StringBuffer();
 
@@ -552,11 +438,13 @@ public class GeetestLib {
 
 		return sBuffer.toString();
 	}
-
+	
+	
+	
+	
 	/**
 	 * 判断一个表单对象值是否为空
 	 * 
-	 * @time 2014年7月10日 下午5:54:25
 	 * @param gtObj
 	 * @return
 	 */
@@ -574,9 +462,8 @@ public class GeetestLib {
 	}
 
 	/**
-	 * 检查客户端的请求是否为空--三个只要有一个为空，则判断不合法
+	 * 检查客户端的请求是否合法,三个只要有一个为空，则判断不合法
 	 * 
-	 * @time 2014年7月10日 下午5:46:34
 	 * @param request
 	 * @return
 	 */
@@ -596,22 +483,69 @@ public class GeetestLib {
 
 		return true;
 	}
-
+	
+	
+	
 	/**
-	 * 检验验证请求 传入的参数为request--vCode 8之后不再更新,不推荐使用
+	 * 服务正常的情况下使用的验证方式,向gt-server进行二次验证,获取验证结果
 	 * 
-	 * @time 2014年7月10日 下午6:34:55
-	 * @param request
+	 * @param challenge
+	 * @param validate
+	 * @param seccode
 	 * @return
 	 */
-	public boolean validateRequest(HttpServletRequest request) {
+	public String enhencedValidateRequest(HttpServletRequest request) {
 
-		boolean gtResult = this.validate(
-				request.getParameter(this.fn_geetest_challenge),
-				request.getParameter(this.fn_geetest_validate),
-				request.getParameter(this.fn_geetest_seccode));
+		if (!resquestIsLegal(request)) {
+			return GeetestLib.fail_res;
+		}
+		
+		String challenge = request.getParameter(this.fn_geetest_challenge);
+		String validate = request.getParameter(this.fn_geetest_validate);
+		String seccode = request.getParameter(this.fn_geetest_seccode);
+		
 
-		return gtResult;
+		String host = baseUrl;
+		String path = "/validate.php";
+		int port = 80;
+		// String query = "seccode=" + seccode + "&sdk=" + this.sdkLang + "_"
+		// + this.verName;
+
+		String query = String.format("seccode=%s&sdk=%s", seccode,
+				(this.sdkLang + "_" + this.verName));
+	
+		if (!challenge.substring(0, 32).equals(this.getChallengeId())) {
+			return GeetestLib.fail_res;
+		}
+		
+		String response = "";
+
+		gtlog(query);
+		try {
+			gtlog("hehe:"+challenge);
+			if (validate.length() <= 0) {
+				return GeetestLib.fail_res;
+			}
+
+			if (!checkResultByPrivate(challenge, validate)) {
+				return GeetestLib.fail_res;
+			}
+
+			response = postValidate(host, path, query, port);
+
+			gtlog("response: " + response);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		gtlog("md5: " + md5Encode(seccode));
+
+		if (response.equals(md5Encode(seccode))) {
+			return GeetestLib.success_res;
+		} else {
+			return response;
+		}
+
 	}
 
 	/**
@@ -630,11 +564,13 @@ public class GeetestLib {
 
 		String challenge = request.getParameter(this.fn_geetest_challenge);
 		String validate = request.getParameter(this.fn_geetest_validate);
-		// String seccode = request.getParameter(this.fn_geetest_seccode);
+		String seccode = request.getParameter(this.fn_geetest_seccode);
 
 		if (!challenge.equals(this.getChallengeId())) {
 			return GeetestLib.fail_res;
 		}
+		
+		gtlog(challenge.substring(0, 32));
 
 		String[] validateStr = validate.split("_");
 		String encodeAns = validateStr[0];
@@ -666,6 +602,8 @@ public class GeetestLib {
 
 		return validateResult;
 	}
+	
+	
 
 	/**
 	 *
@@ -709,33 +647,10 @@ public class GeetestLib {
 			return GeetestLib.fail_res;
 		}
 	}
-
-	/**
-	 * 输入的两位的随机数字,解码出偏移量
-	 * 
-	 * @param randStr
-	 * @return
-	 */
-	public int decodeRandBase(String challenge) {
-
-		String base = challenge.substring(32, 34);
-		ArrayList<Integer> tempArray = new ArrayList<Integer>();
-
-		for (int i = 0; i < base.length(); i++) {
-			char tempChar = base.charAt(i);
-			Integer tempAscii = (int) (tempChar);
-
-			Integer result = (tempAscii > 57) ? (tempAscii - 87)
-					: (tempAscii - 48);
-
-			tempArray.add(result);
-		}
-
-		int decodeRes = tempArray.get(0) * 36 + tempArray.get(1);
-		return decodeRes;
-
-	}
-
+	
+	
+	
+	
 	/**
 	 * 解码随机参数
 	 * 
@@ -743,7 +658,7 @@ public class GeetestLib {
 	 * @param challenge
 	 * @return
 	 */
-	public int decodeResponse(String challenge, String string) {
+	private int decodeResponse(String challenge, String string) {
 		if (string.length() > 100) {
 			return 0;
 		}
@@ -779,111 +694,35 @@ public class GeetestLib {
 	}
 
 	/**
-	 * 增强版的验证信息,提供了更多的验证返回结果信息，以让客户服务器端有不同的数据处理。
+	 * 输入的两位的随机数字,解码出偏移量
 	 * 
-	 * @param challenge
-	 * @param validate
-	 * @param seccode
+	 * @param randStr
 	 * @return
 	 */
-	public String enhencedValidateRequest(HttpServletRequest request) {
+	private int decodeRandBase(String challenge) {
 
-		if (!resquestIsLegal(request)) {
-			return GeetestLib.fail_res;
+		String base = challenge.substring(32, 34);
+		ArrayList<Integer> tempArray = new ArrayList<Integer>();
+
+		for (int i = 0; i < base.length(); i++) {
+			char tempChar = base.charAt(i);
+			Integer tempAscii = (int) (tempChar);
+
+			Integer result = (tempAscii > 57) ? (tempAscii - 87)
+					: (tempAscii - 48);
+
+			tempArray.add(result);
 		}
 
-		String challenge = request.getParameter(this.fn_geetest_challenge);
-		String validate = request.getParameter(this.fn_geetest_validate);
-		String seccode = request.getParameter(this.fn_geetest_seccode);
-		// String gtuser = "";
-
-		// Cookie[] cookies = request.getCookies();
-		//
-		// if (cookies != null) {
-		// for (int i = 0; i < cookies.length; i++) {
-		// Cookie cookie = cookies[i];
-		// if ("GeeTestUser".equals(cookie.getName())) {
-		// gtuser = cookie.getValue();
-		// gtlog(String.format("GeeTestUser:%s", gtuser));
-		// }
-		// }
-		// }
-
-		String host = baseUrl;
-		String path = "/validate.php";
-		int port = 80;
-		// String query = "seccode=" + seccode + "&sdk=" + this.sdkLang + "_"
-		// + this.verName;
-
-		String query = String.format("seccode=%s&sdk=%s", seccode,
-				(this.sdkLang + "_" + this.verName));
-
-		String response = "";
-
-		gtlog(query);
-		try {
-			if (validate.length() <= 0) {
-				return GeetestLib.fail_res;
-			}
-
-			if (!checkResultByPrivate(challenge, validate)) {
-				return GeetestLib.fail_res;
-			}
-
-			response = postValidate(host, path, query, port);
-
-			gtlog("response: " + response);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		gtlog("md5: " + md5Encode(seccode));
-
-		if (response.equals(md5Encode(seccode))) {
-			return GeetestLib.success_res;
-		} else {
-			return response;
-		}
+		int decodeRes = tempArray.get(0) * 36 + tempArray.get(1);
+		return decodeRes;
 
 	}
+	
+	
 
 	/**
-	 * the old api use before version code 8(not include)
-	 * 
-	 * @param challenge
-	 * @param validate
-	 * @param seccode
-	 * @return
-	 * @time 2014122_171529 by zheng
-	 */
-	private boolean validate(String challenge, String validate, String seccode) {
-		String host = baseUrl;
-		String path = "/validate.php";
-		int port = 80;
-		if (validate.length() > 0 && checkResultByPrivate(challenge, validate)) {
-			String query = "seccode=" + seccode;
-			String response = "";
-			try {
-				response = postValidate(host, path, query, port);
-				gtlog(response);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-			gtlog("md5: " + md5Encode(seccode));
-
-			if (response.equals(md5Encode(seccode))) {
-				return true;
-			}
-		}
-		return false;
-
-	}
-
-	/**
-	 * Print out log message Use to Debug
-	 * 
-	 * @time 2014122_151829 by zheng
+	 * 输出debug信息，需要开启debugCode
 	 * 
 	 * @param message
 	 */
@@ -899,7 +738,7 @@ public class GeetestLib {
 	}
 
 	/**
-	 * fuck，貌似不是Post方式，后面重构时修改名字
+	 * 貌似不是Post方式，后面重构时修改名字
 	 * 
 	 * @param host
 	 * @param path
@@ -938,19 +777,6 @@ public class GeetestLib {
 		return response;
 	}
 
-	// /**
-	// * 转为UTF8编码
-	// *
-	// * @time 2014年7月10日 下午3:29:45
-	// * @param str
-	// * @return
-	// * @throws UnsupportedEncodingException
-	// */
-	// private String fixEncoding(String str) throws
-	// UnsupportedEncodingException {
-	// String tempStr = new String(str.getBytes("UTF-8"));
-	// return URLEncoder.encode(tempStr, "UTF-8");
-	// }
 
 	/**
 	 * md5 加密
@@ -959,7 +785,7 @@ public class GeetestLib {
 	 * @param plainText
 	 * @return
 	 */
-	public String md5Encode(String plainText) {
+	private String md5Encode(String plainText) {
 		String re_md5 = new String();
 		try {
 			MessageDigest md = MessageDigest.getInstance("MD5");

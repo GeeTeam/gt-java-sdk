@@ -11,40 +11,37 @@ import javax.servlet.http.HttpServletResponse;
 import com.geetest.sdk.java.GeetestLib;
 
 /**
- * 使用Get的方式返回：challenge和capthca_id 此方式以实现前后端完全分离的开发模式 专门实现failback
- * 
- * @author zheng
+ * 使用Get的方式返回challenge和capthca_id,此方式以实现前后端完全分离的开发模式
  *
  */
 public class StartCaptchaServlet extends HttpServlet {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		// Conifg the parameter of the geetest object
 		GeetestLib gtSdk = new GeetestLib();
 		gtSdk.setCaptchaId(GeetestConfig.getCaptcha_id());
 		gtSdk.setPrivateKey(GeetestConfig.getPrivate_key());
 
-		gtSdk.setGtSession(request);//如果是同一会话多实例，可以使用此函数的另一重载实现式，设置不同的key即可
-
 		String resStr = "{}";
 
+		//进行验证预处理
 		if (gtSdk.preProcess() == 1) {
-			// gt server is in use
-			resStr = gtSdk.getSuccessPreProcessRes();
-			gtSdk.setGtServerStatusSession(request, 1);
+			// gt-server服务正常,预处理完成
+			
+			resStr = gtSdk.getSuccessPreProcessRes(); //预处理成功，获取标准返回
+			gtSdk.setGtServerStatusSession(request, 1); //在session中设置gt-server服务状态
 
 		} else {
-			// gt server is down
-			resStr = gtSdk.getFailPreProcessRes();
-			gtSdk.setGtServerStatusSession(request, 0);
+			// 预处理失败
+			
+			resStr = gtSdk.getFailPreProcessRes(); //无法连接到gt-server服务器，进行相应处理, 获得返回
+			gtSdk.setGtServerStatusSession(request, 0); //在session中设置gt-server服务状态
 		}
+		
+		gtSdk.setChallengeSession(request); //将challenge设置到session中，二次验证进行challenge比对
 
 		PrintWriter out = response.getWriter();
 		out.println(resStr);
