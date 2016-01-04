@@ -499,7 +499,7 @@ public class GeetestLib {
 		if (!resquestIsLegal(request)) {
 			return GeetestLib.fail_res;
 		}
-		
+		gtlog("request legitimate");
 		String challenge = request.getParameter(this.fn_geetest_challenge);
 		String validate = request.getParameter(this.fn_geetest_validate);
 		String seccode = request.getParameter(this.fn_geetest_seccode);
@@ -513,16 +513,12 @@ public class GeetestLib {
 
 		String query = String.format("seccode=%s&sdk=%s", seccode,
 				(this.sdkLang + "_" + this.verName));
-	
-		if (!challenge.substring(0, 32).equals(this.getChallengeId())) {
-			return GeetestLib.fail_res;
-		}
 		
 		String response = "";
 
 		gtlog(query);
 		try {
-			gtlog("hehe:"+challenge);
+			gtlog(challenge);
 			if (validate.length() <= 0) {
 				return GeetestLib.fail_res;
 			}
@@ -561,16 +557,11 @@ public class GeetestLib {
 		if (!resquestIsLegal(request)) {
 			return GeetestLib.fail_res;
 		}
+		gtlog("request legitimate");
 
 		String challenge = request.getParameter(this.fn_geetest_challenge);
 		String validate = request.getParameter(this.fn_geetest_validate);
 		String seccode = request.getParameter(this.fn_geetest_seccode);
-
-		if (!challenge.equals(this.getChallengeId())) {
-			return GeetestLib.fail_res;
-		}
-		
-		gtlog(challenge.substring(0, 32));
 
 		String[] validateStr = validate.split("_");
 		String encodeAns = validateStr[0];

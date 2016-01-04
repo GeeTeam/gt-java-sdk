@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.geetest.sdk.java.GeetestLib;
 import com.geetest.sdk.java.web.demo.GeetestConfig;
 
+
 /**
  * 使用post方式，返回验证结果, request表单中必须包含challenge, validate, seccode
  */
