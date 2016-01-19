@@ -19,8 +19,7 @@
 
 1. GeetestLib.java
     提供只带拼图行为验证的功能
-#. GeetestMsgLib.java
-    提供带短信功能打包的完整功能,继承于GeetestLib.java所定义的类
+
     
 极验行为验证Demo
 ------------------------------------
@@ -42,26 +41,6 @@
 1. 实现failback的前端逻辑，在正常和非正常之间形成无缝自动化切换。
 #. 在极验服务器down机的情况下，避免同步请求长达20s的阻塞页面
 #. 在极验服务down机头部下，仍然先优先使用异步加载，把加载时间减少一半。
-
-	
-	
-短信和极验行为验证Demo
--------------------------------------------------
-
-包名：*com.geetest.sdk.java.msg.demo*
-
-1. GeetestMsgConfig.java
-	Web用户配置文件。此处填写用户自己申请的验证模块ID/KEY
-#. StartMsgCaptchaServlet.java
-	用户判断极验服务器是否Down机的示例Servlet,页面生成前置处理
-#. VerifyGeetestServlet.java
-	获取短信前的一次验证逻辑控制
-#. VerifyMsgServlet.java
-	提交短信验证示例Servlet
-#. msg_login.jsp
-	短信+行为验证的前端示范页面
-#. ./lib/java-json.jar
-    Java的json解码包。用户如果有其它包可以在此替换。
 	
 
 
@@ -115,6 +94,11 @@ QQ:1295351490
 - 添加API文档
 - 删除一些不再使用的接口
 
+3.0.0
+---------------------------
+
+- Sdk不再对session进行直接操作，这部分由开发者自己完成
+- 删除一些不再使用的接口
 
 
 

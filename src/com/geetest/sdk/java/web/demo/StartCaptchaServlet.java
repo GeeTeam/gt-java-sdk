@@ -29,20 +29,12 @@ public class StartCaptchaServlet extends HttpServlet {
 		String resStr = "{}";
 
 		//进行验证预处理
-		if (gtSdk.preProcess() == 1) {
-			// gt-server服务正常,预处理完成
-			
-			resStr = gtSdk.getSuccessPreProcessRes(); //预处理成功，获取标准返回
-			gtSdk.setGtServerStatusSession(request, 1); //在session中设置gt-server服务状态
-
-		} else {
-			// 预处理失败
-			
-			resStr = gtSdk.getFailPreProcessRes(); //无法连接到gt-server服务器，进行相应处理, 获得返回
-			gtSdk.setGtServerStatusSession(request, 0); //在session中设置gt-server服务状态
-		}
+		int gtServerStatus = gtSdk.preProcess();
 		
-		gtSdk.setChallengeSession(request); //将challenge设置到session中，二次验证进行challenge比对
+		//将服务器状态设置到session中
+		request.getSession().setAttribute(gtSdk.gtServerStatusSessionKey, gtServerStatus);
+		
+		resStr = gtSdk.getResponseStr();
 
 		PrintWriter out = response.getWriter();
 		out.println(resStr);
