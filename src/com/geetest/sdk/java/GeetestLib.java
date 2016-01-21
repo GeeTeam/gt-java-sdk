@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class GeetestLib {
 
-	protected final String verName = "3.0.0";// SDK版本编号
+	protected final String verName = "3.0.1";// SDK版本编号
 	protected final String sdkLang = "java";// SD的语言类型
 
 	protected final String apiUrl = "http://api.geetest.com"; //极验验证API URL
@@ -64,8 +64,6 @@ public class GeetestLib {
 	 * 私钥
 	 */
 	private String privateKey = "";
-	
-	private String challenge = "";
 	
 	private String responseStr = "";
 	
@@ -125,11 +123,11 @@ public class GeetestLib {
 	 * 预处理成功后的标准串
 	 * 
 	 */
-	private String getSuccessPreProcessRes() {
+	private String getSuccessPreProcessRes(String challenge) {
 		
 		return String.format(
 				"{\"success\":%s,\"gt\":\"%s\",\"challenge\":\"%s\"}", 1,
-				this.captchaId, this.challenge);
+				this.captchaId, challenge);
 	}
 
 	/**
@@ -145,7 +143,6 @@ public class GeetestLib {
 			return 0;
 		}
 		
-		responseStr = this.getSuccessPreProcessRes();
 		return 1;
 
 	}
@@ -162,7 +159,7 @@ public class GeetestLib {
 			String result_str = readContentFromGet(GET_URL);
 			gtlog("register_result:" + result_str);
 			if (32 == result_str.length()) {
-				this.challenge = result_str;
+				responseStr = this.getSuccessPreProcessRes(result_str);
 				return 1;
 			} else {
 				gtlog("gtServer register challenge failed");
