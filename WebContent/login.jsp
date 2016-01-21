@@ -56,8 +56,7 @@ body {
 
 			<%--Start  Code--%>
 			<div class="row">
-				<div id="div_geetest_lib"></div>
-				<div id="div_id_embed"></div>
+		<div id="captcha"></div>
 
 				<%--End  Code--%>
 
@@ -66,95 +65,29 @@ body {
 					<input type="submit" value="登录" id="submit-button" />
 				</div>
 
-				<script type="text/javascript">
-				
-
-				function geetest_ajax_results() {
-					//TODO, not necessory a geetest ajax demo,
-					$.ajax({
-						url : "/todo/VerifyLoginServlet",//todo:set the servelet of your own
-						type : "post",
-						data : gt_captcha_obj.getValidate(),
-						success : function(sdk_result) {
-							console.log(sdk_result)
-						}
-					});
-				}
-				
-				
-					var gtFailbackFrontInitial = function(result) {
-						var s = document.createElement('script');
-						s.id = 'gt_lib';
-						s.src = 'http://static.geetest.com/static/js/geetest.0.0.0.js';
-						s.charset = 'UTF-8';
-						s.type = 'text/javascript';
-						document.getElementsByTagName('head')[0].appendChild(s);
-						var 
-					loaded = false;
-						s.onload = s.onreadystatechange = function() {
-							if (!loaded
-									&& (!this.readyState
-											|| this.readyState === 'loaded' || this.readyState === 'complete')) {
-								loadGeetest(result);
-								loaded = true;
-							}
-						};
-					}
-					//get  geetest server status, use the failback solution
-
-
-					var loadGeetest = function(config) {
-
-						//1. use geetest captcha
-						window.gt_captcha_obj = new window.Geetest({
-							gt : config.gt,
-							challenge : config.challenge,
-							product : 'embed',
-							offline : !config.success
-						});
-
-						gt_captcha_obj.appendTo("#div_id_embed");
-
-						//Ajax request demo,if you use submit form ,then ignore it 
-						gt_captcha_obj.onSuccess(function() {
-							geetest_ajax_results()
-						});
-					}
-
-					s = document.createElement('script');
-					s.src = 'http://api.geetest.com/get.php?callback=gtcallback';
-					$("#div_geetest_lib").append(s);
-					
-					var gtcallback =( function() {
-						var status = 0, result, apiFail;
-						return function(r) {
-							status += 1;
-							if (r) {
-								result = r;
-								setTimeout(function() {
-									if (!window.Geetest) {
-										apiFail = true;
-										gtFailbackFrontInitial(result)
-									}
-								}, 1000)
-							}
-							else if(apiFail) {
-								return
-							}
-							if (status == 2) {
-								loadGeetest(result);
-							}
-						}
-					})()
-					
-					$.ajax({
-								url : "StartCaptchaServlet",
-								type : "get",
-								dataType : 'JSON',
-								success : function(result) {
-									gtcallback(result)
-								}
-							})
+				<script src="http://static.geetest.com/static/tools/gt.js"></script>
+				<script>
+				    var handler = function (captchaObj) {
+				         // 将验证码加到id为captcha的元素里
+				         captchaObj.appendTo("#captcha");
+				     };
+				    $.ajax({
+				        // 获取id，challenge，success（是否启用failback）
+				        url: "StartCaptchaServlet",
+				        type: "get",
+				        dataType: "json", // 使用jsonp格式
+				        success: function (data) {
+				            // 使用initGeetest接口
+				            // 参数1：配置参数，与创建Geetest实例时接受的参数一致
+				            // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它做appendTo之类的事件
+				            initGeetest({
+				                gt: data.gt,
+				                challenge: data.challenge,
+				                product: "embed", // 产品形式
+				                offline: !data.success
+				            }, handler);
+				        }
+				    });
 				</script>
 			</div>
 
