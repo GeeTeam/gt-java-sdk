@@ -22,9 +22,7 @@ public class StartCaptchaServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		GeetestLib gtSdk = new GeetestLib();
-		gtSdk.setCaptchaId(GeetestConfig.getCaptcha_id());
-		gtSdk.setPrivateKey(GeetestConfig.getPrivate_key());
+		GeetestLib gtSdk = new GeetestLib(GeetestConfig.getCaptcha_id(), GeetestConfig.getPrivate_key());
 
 		String resStr = "{}";
 

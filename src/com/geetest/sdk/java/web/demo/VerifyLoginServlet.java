@@ -22,10 +22,7 @@ public class VerifyLoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		GeetestLib gtSdk = new GeetestLib();
-		
-		gtSdk.setCaptchaId(GeetestConfig.getCaptcha_id());
-		gtSdk.setPrivateKey(GeetestConfig.getPrivate_key());
+		GeetestLib gtSdk = new GeetestLib(GeetestConfig.getCaptcha_id(), GeetestConfig.getPrivate_key());
 			
 		String challenge = request.getParameter(GeetestLib.fn_geetest_challenge);
 		String validate = request.getParameter(GeetestLib.fn_geetest_validate);
