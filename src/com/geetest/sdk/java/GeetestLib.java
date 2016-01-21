@@ -78,39 +78,22 @@ public class GeetestLib {
 	 * 极验验证API服务状态Session Key
 	 */
 	public String gtServerStatusSessionKey = "gt_server_status";
-
-	/**
-	 * 无参数构造函数
-	 */
-	public GeetestLib() {
-	}
 	
 	/**
 	 * 带参数构造函数
+	 * 
+	 * @param captchaId
+	 * @param privateKey
 	 */
-	public GeetestLib(String privateKey, String captchaId) {
-		this.privateKey = privateKey;
+	public GeetestLib(String captchaId, String privateKey) {
 		this.captchaId = captchaId;
-	}
-
-	public String getPrivateKey() {
-		return privateKey;
-	}
-
-	public void setPrivateKey(String privateKey) {
 		this.privateKey = privateKey;
-	}
-
-	public String getCaptchaId() {
-		return captchaId;
-	}
-
-	public void setCaptchaId(String captchaId) {
-		this.captchaId = captchaId;
 	}
 	
 	/**
 	 * 获取本次验证初始化返回字符串
+	 * 
+	 * @return 初始化结果
 	 */
 	public String getResponseStr() {
 		return responseStr;
@@ -135,25 +118,24 @@ public class GeetestLib {
 
 		return String.format(
 				"{\"success\":%s,\"gt\":\"%s\",\"challenge\":\"%s\"}", 0,
-				this.getCaptchaId(), challenge);
+				this.captchaId, challenge);
 	}
 
 	/**
 	 * 预处理成功后的标准串
 	 * 
-	 * @return
 	 */
 	private String getSuccessPreProcessRes() {
 		
 		return String.format(
 				"{\"success\":%s,\"gt\":\"%s\",\"challenge\":\"%s\"}", 1,
-				this.getCaptchaId(), this.challenge);
+				this.captchaId, this.challenge);
 	}
 
 	/**
 	 * 验证初始化预处理
 	 *
-	 * @return
+	 * @return 1表示初始化成功，0表示初始化失败
 	 */
 	public int preProcess() {
 
@@ -279,7 +261,7 @@ public class GeetestLib {
 	 * @param challenge
 	 * @param validate
 	 * @param seccode
-	 * @return
+	 * @return 验证结果
 	 */
 	public String enhencedValidateRequest(String challenge, String validate, String seccode) {	
 		
@@ -326,8 +308,10 @@ public class GeetestLib {
 	/**
 	 * failback使用的验证方式
 	 * 
-	 * @param request
-	 * @return
+	 * @param challenge
+	 * @param validate
+	 * @param seccode
+	 * @return 验证结果
 	 */
 	public String failbackValidateRequest(String challenge, String validate, String seccode) {
 
