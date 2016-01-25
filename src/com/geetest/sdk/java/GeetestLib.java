@@ -1,5 +1,6 @@
 package com.geetest.sdk.java;
 
+import java.awt.print.Printable;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -64,7 +65,7 @@ public class GeetestLib {
 	 * 私钥
 	 */
 	private String privateKey = "";
-	
+
 	private String responseStr = "";
 	
 	/**
@@ -125,6 +126,7 @@ public class GeetestLib {
 	 */
 	private String getSuccessPreProcessRes(String challenge) {
 		
+		gtlog(challenge);
 		return String.format(
 				"{\"success\":%s,\"gt\":\"%s\",\"challenge\":\"%s\"}", 1,
 				this.captchaId, challenge);
@@ -139,7 +141,7 @@ public class GeetestLib {
 
 		if (registerChallenge() != 1) {
 			
-			responseStr = this.getFailPreProcessRes();
+			this.responseStr = this.getFailPreProcessRes();
 			return 0;
 		}
 		
@@ -159,7 +161,9 @@ public class GeetestLib {
 			String result_str = readContentFromGet(GET_URL);
 			gtlog("register_result:" + result_str);
 			if (32 == result_str.length()) {
-				responseStr = this.getSuccessPreProcessRes(result_str);
+
+				this.responseStr = this.getSuccessPreProcessRes(this.md5Encode(result_str + this.privateKey));
+				
 				return 1;
 			} else {
 				gtlog("gtServer register challenge failed");
@@ -222,7 +226,6 @@ public class GeetestLib {
 		if (gtObj.toString().trim().length() == 0) {
 			return true;
 		}
-		// && gtObj.toString().trim().length() > 0
 
 		return false;
 	}
@@ -276,7 +279,6 @@ public class GeetestLib {
 
 		gtlog(query);
 		try {
-			gtlog("challenge:" + challenge);
 			if (validate.length() <= 0) {
 				return GeetestLib.fail_res;
 			}
@@ -284,7 +286,7 @@ public class GeetestLib {
 			if (!checkResultByPrivate(challenge, validate)) {
 				return GeetestLib.fail_res;
 			}
-
+			gtlog("checkResultByPrivate");
 			response = postValidate(host, path, query, port);
 
 			gtlog("response: " + response);
