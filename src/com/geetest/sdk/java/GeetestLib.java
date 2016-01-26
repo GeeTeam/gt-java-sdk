@@ -36,11 +36,6 @@ public class GeetestLib {
 	protected final String registerUrl = "/register.php"; //register url
 	protected final String validateUrl = "/validate.php"; //validate url
 
-	// 一些常量
-	public static final String success_res = "success";
-	public static final String fail_res = "fail";
-	public static final String forbidden_res = "forbidden";
-
 	/**
 	 * 极验验证二次验证表单数据 chllenge
 	 */
@@ -261,12 +256,12 @@ public class GeetestLib {
 	 * @param challenge
 	 * @param validate
 	 * @param seccode
-	 * @return 验证结果
+	 * @return 验证结果,1表示验证成功0表示验证失败
 	 */
-	public String enhencedValidateRequest(String challenge, String validate, String seccode) {	
+	public int enhencedValidateRequest(String challenge, String validate, String seccode) {	
 		
 		if (!resquestIsLegal(challenge, validate, seccode)) {
-			return GeetestLib.fail_res;
+			return 0;
 		}
 		gtlog("request legitimate");
 		
@@ -280,11 +275,11 @@ public class GeetestLib {
 		gtlog(query);
 		try {
 			if (validate.length() <= 0) {
-				return GeetestLib.fail_res;
+				return 0;
 			}
 
 			if (!checkResultByPrivate(challenge, validate)) {
-				return GeetestLib.fail_res;
+				return 0;
 			}
 			gtlog("checkResultByPrivate");
 			response = postValidate(host, path, query, port);
@@ -297,9 +292,9 @@ public class GeetestLib {
 		gtlog("md5: " + md5Encode(seccode));
 
 		if (response.equals(md5Encode(seccode))) {
-			return GeetestLib.success_res;
+			return 1;
 		} else {
-			return response;
+			return 0;
 		}
 
 	}
@@ -310,14 +305,14 @@ public class GeetestLib {
 	 * @param challenge
 	 * @param validate
 	 * @param seccode
-	 * @return 验证结果
+	 * @return 验证结果,1表示验证成功0表示验证失败
 	 */
-	public String failbackValidateRequest(String challenge, String validate, String seccode) {
+	public int failbackValidateRequest(String challenge, String validate, String seccode) {
 
 		gtlog("in failback validate");
 
 		if (!resquestIsLegal(challenge, validate, seccode)) {
-			return GeetestLib.fail_res;
+			return 0;
 		}
 		gtlog("request legitimate");
 
@@ -337,7 +332,7 @@ public class GeetestLib {
 		gtlog(String.format("decode----ans:%s,bg_idx:%s,grp_idx:%s", decodeAns,
 				decodeFullBgImgIndex, decodeImgGrpIndex));
 
-		String validateResult = validateFailImage(decodeAns,decodeFullBgImgIndex, decodeImgGrpIndex);
+		int validateResult = validateFailImage(decodeAns,decodeFullBgImgIndex, decodeImgGrpIndex);
 
 		return validateResult;
 	}
@@ -351,7 +346,7 @@ public class GeetestLib {
 	 * @param img_grp_index
 	 * @return
 	 */
-	private String validateFailImage(int ans, int full_bg_index,
+	private int validateFailImage(int ans, int full_bg_index,
 			int img_grp_index) {
 		final int thread = 3;// 容差值
 
@@ -381,9 +376,9 @@ public class GeetestLib {
 		}
 
 		if (Math.abs(ans - result) <= thread) {
-			return GeetestLib.success_res;
+			return 1;
 		} else {
-			return GeetestLib.fail_res;
+			return 0;
 		}
 	}
 	

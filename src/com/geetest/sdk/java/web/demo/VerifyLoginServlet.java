@@ -31,7 +31,7 @@ public class VerifyLoginServlet extends HttpServlet {
 		//从session中获取gt-server状态
 		int gt_server_status_code = (Integer) request.getSession().getAttribute(gtSdk.gtServerStatusSessionKey);
 		
-		String gtResult = "fail";
+		int gtResult = 0;
 
 		if (gt_server_status_code == 1) {
 			//gt-server正常，向gt-server进行二次验证
@@ -43,22 +43,19 @@ public class VerifyLoginServlet extends HttpServlet {
 				
 			System.out.println("failback:use your own server captcha validate");
 			gtResult = gtSdk.failbackValidateRequest(challenge, validate, seccode);
+			System.out.println(gtResult);
 		}
 
 
-		if (gtResult.equals(GeetestLib.success_res)) {
+		if (gtResult == 1) {
 			// 验证成功
 			PrintWriter out = response.getWriter();
-			out.println(GeetestLib.success_res + ":" + gtSdk.getVersionInfo());
-
-		} else if (gtResult.equals(GeetestLib.forbidden_res)) {
-			// 验证被判为机器人
-			PrintWriter out = response.getWriter();
-			out.println(GeetestLib.forbidden_res + ":" + gtSdk.getVersionInfo());
-		} else {
+			out.println("success:" + gtSdk.getVersionInfo());
+		}
+		else {
 			// 验证失败
 			PrintWriter out = response.getWriter();
-			out.println(GeetestLib.fail_res + ":" + gtSdk.getVersionInfo());
+			out.println("fail:" + gtSdk.getVersionInfo());
 		}
 
 	}
