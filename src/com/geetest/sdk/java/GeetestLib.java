@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class GeetestLib {
 
-	protected final String verName = "3.0.1";// SDK版本编号
+	protected final String verName = "3.1.0";// SDK版本编号
 	protected final String sdkLang = "java";// SD的语言类型
 
 	protected final String apiUrl = "http://api.geetest.com"; //极验验证API URL
@@ -126,7 +126,7 @@ public class GeetestLib {
 	 */
 	private String getSuccessPreProcessRes(String challenge) {
 		
-		gtlog(challenge);
+		gtlog("challenge:" + challenge);
 		return String.format(
 				"{\"success\":%s,\"gt\":\"%s\",\"challenge\":\"%s\"}", 1,
 				this.captchaId, challenge);
