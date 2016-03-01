@@ -31,12 +31,15 @@ public class VerifyLoginServlet extends HttpServlet {
 		//从session中获取gt-server状态
 		int gt_server_status_code = (Integer) request.getSession().getAttribute(gtSdk.gtServerStatusSessionKey);
 		
+		//从session中获取userid
+		String userid = (String)request.getSession().getAttribute("userid");
+		
 		int gtResult = 0;
 
 		if (gt_server_status_code == 1) {
 			//gt-server正常，向gt-server进行二次验证
 				
-			gtResult = gtSdk.enhencedValidateRequest(challenge, validate, seccode);
+			gtResult = gtSdk.enhencedValidateRequest(challenge, validate, seccode, userid);
 			System.out.println(gtResult);
 		} else {
 			// gt-server非正常情况下，进行failback模式验证

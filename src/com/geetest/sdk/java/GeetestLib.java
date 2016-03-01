@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class GeetestLib {
 
-	protected final String verName = "3.1.0";// SDK版本编号
+	protected final String verName = "3.2.0";// SDK版本编号
 	protected final String sdkLang = "java";// SD的语言类型
 
 	protected final String apiUrl = "http://api.geetest.com"; //极验验证API URL
@@ -59,7 +59,10 @@ public class GeetestLib {
 	/**
 	 * 私钥
 	 */
+	
 	private String privateKey = "";
+	
+	private String userId = "";
 
 	private String responseStr = "";
 	
@@ -143,6 +146,20 @@ public class GeetestLib {
 		return 1;
 
 	}
+	
+	/**
+	 * 验证初始化预处理
+	 *
+	 * @param userid
+	 * @return 1表示初始化成功，0表示初始化失败
+	 */
+	public int preProcess(String userid){
+		
+		this.userId = userid;
+		return this.preProcess();
+	}
+	
+	
 
 	/**
 	 * 用captchaID进行注册，更新challenge
@@ -152,6 +169,10 @@ public class GeetestLib {
 	private int registerChallenge() {
 		try {
 			String GET_URL = apiUrl + registerUrl+"?gt=" + this.captchaId;
+			if (this.userId != ""){
+				GET_URL = GET_URL + "&user_id=" + this.userId;
+				this.userId = "";
+			}
 			gtlog("GET_URL:" + GET_URL);
 			String result_str = readContentFromGet(GET_URL);
 			gtlog("register_result:" + result_str);
@@ -165,7 +186,7 @@ public class GeetestLib {
 				return 0;
 			}
 		} catch (Exception e) {
-			gtlog("exception:register api:");
+			gtlog("exception:register api");
 		}
 		return 0;
 	}
@@ -249,7 +270,6 @@ public class GeetestLib {
 	}
 	
 	
-	
 	/**
 	 * 服务正常的情况下使用的验证方式,向gt-server进行二次验证,获取验证结果
 	 * 
@@ -271,7 +291,11 @@ public class GeetestLib {
 		String query = String.format("seccode=%s&sdk=%s", seccode,
 				(this.sdkLang + "_" + this.verName));
 		String response = "";
-
+		
+		if (this.userId != ""){
+			query = query + "&user_id=" + this.userId;
+			this.userId = "";
+		}
 		gtlog(query);
 		try {
 			if (validate.length() <= 0) {
@@ -296,7 +320,21 @@ public class GeetestLib {
 		} else {
 			return 0;
 		}
-
+	}
+	
+	/**
+	 * 服务正常的情况下使用的验证方式,向gt-server进行二次验证,获取验证结果
+	 * 
+	 * @param challenge
+	 * @param validate
+	 * @param seccode
+	 * @param userid
+	 * @return 验证结果,1表示验证成功0表示验证失败
+	 */
+	public int enhencedValidateRequest(String challenge, String validate, String seccode, String userid) {	
+		
+		this.userId = userid;
+		return this.enhencedValidateRequest(challenge, validate, seccode);
 	}
 
 	/**

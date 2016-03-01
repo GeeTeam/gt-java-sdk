@@ -25,12 +25,17 @@ public class StartCaptchaServlet extends HttpServlet {
 		GeetestLib gtSdk = new GeetestLib(GeetestConfig.getCaptcha_id(), GeetestConfig.getPrivate_key());
 
 		String resStr = "{}";
+		
+		//自定义userid
+		String userid = "test";
 
 		//进行验证预处理
-		int gtServerStatus = gtSdk.preProcess();
+		int gtServerStatus = gtSdk.preProcess(userid);
 		
 		//将服务器状态设置到session中
 		request.getSession().setAttribute(gtSdk.gtServerStatusSessionKey, gtServerStatus);
+		//将userid设置到session中
+		request.getSession().setAttribute("userid", userid);
 		
 		resStr = gtSdk.getResponseStr();
 
