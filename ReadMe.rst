@@ -58,6 +58,12 @@
 #. 打开tomcat
 #. 在浏览器中访问http://localhost:8080/gt-java-sdk/login.jsp即可看到Demo界面
 
+集成验证服务到自己项目
+=========================
+
+1. 将com.geetest.sdk.java这个包引入项目中
+#. 根据自身使用情况修改前端代码调用验证码,前端文档 http://www.geetest.com/install/sections/idx-client-sdk.html#web
+#. 修改后台代码，具体可以参考demo中的后台进行修改
 
 failback效果展示
 =========================
@@ -75,13 +81,6 @@ failback效果
 
 .. image::  ./2015-06-16-002.png
 
-
-集成验证服务到自己网站上
-=========================
-
-1. 将com.geetest.sdk.java这个包引入项目中
-#. 根据自身使用情况修改前端代码调用验证码,前端文档 http://www.geetest.com/install/sections/idx-client-sdk.html#web
-#. 修改后台代码，具体可以参考demo中的后台使用进行修改
 
 
 联系作者
