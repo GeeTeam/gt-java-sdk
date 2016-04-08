@@ -88,6 +88,10 @@ body {
 				            }, handler);
 				        }
 				    });
+				    
+				    //这里只是最简单的前端调用
+				    //要了解更多前端使用请访问 http://www.geetest.com/install/sections/idx-client-sdk.html#web
+				    
 				</script>
 			</div>
 
