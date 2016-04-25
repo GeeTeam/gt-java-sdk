@@ -2,6 +2,7 @@ package com.geetest.sdk.java.web.demo;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.rmi.server.SkeletonNotFoundException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,6 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.geetest.sdk.java.GeetestLib;
 import com.geetest.sdk.java.web.demo.GeetestConfig;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 /**
@@ -53,12 +57,26 @@ public class VerifyLoginServlet extends HttpServlet {
 		if (gtResult == 1) {
 			// 验证成功
 			PrintWriter out = response.getWriter();
-			out.println("success:" + gtSdk.getVersionInfo());
+			JSONObject data = new JSONObject();
+			try {
+				data.put("status", "success");
+				data.put("version", gtSdk.getVersionInfo());
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			out.println(data.toString());
 		}
 		else {
 			// 验证失败
+			JSONObject data = new JSONObject();
+			try {
+				data.put("status", "fail");
+				data.put("version", gtSdk.getVersionInfo());
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 			PrintWriter out = response.getWriter();
-			out.println("fail:" + gtSdk.getVersionInfo());
+			out.println(data.toString());
 		}
 
 	}
