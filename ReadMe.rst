@@ -11,7 +11,10 @@
 如果需要移动端的canvas功能，请参考canvas的前端文档。
 
 
+在进行此项目前，请您务必仔细阅读了：极验用户引导手册 [#geetest-user-guid]_
 
+
+.. [#geetest-user-guid] `极验用户必读 <http://www.geetest.com/install/sections/idx-main-frame.html>`__
 
 
 核心SDK库
