@@ -16,30 +16,6 @@
 		<servlet-class>com.geetest.sdk.java.web.demo.VerifyLoginServlet</servlet-class>
 	</servlet>
 
-
-
-	<servlet>
-		<servlet-name>StartMsgCaptchaServlet</servlet-name>
-		<display-name>StartMsgCaptchaServlet</display-name>
-		<description></description>
-		<servlet-class>com.geetest.sdk.java.msg.demo.StartMsgCaptchaServlet</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>VerifyGeetestServlet</servlet-name>
-		<display-name>VerifyGeetestServlet</display-name>
-		<description></description>
-		<servlet-class>com.geetest.sdk.java.msg.demo.VerifyGeetestServlet</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>VerifyMsgServlet</servlet-name>
-		<display-name>VerifyMsgServlet</display-name>
-		<description></description>
-		<servlet-class>com.geetest.sdk.java.msg.demo.VerifyMsgServlet</servlet-class>
-	</servlet>
-
-
-
-
 	<servlet-mapping>
 		<servlet-name>VerifyLoginServlet</servlet-name>
 		<url-pattern>/VerifyLoginServlet</url-pattern>
@@ -47,22 +23,6 @@
 	<servlet-mapping>
 		<servlet-name>StartCaptchaServlet</servlet-name>
 		<url-pattern>/StartCaptchaServlet</url-pattern>
-	</servlet-mapping>
-
-
-	<servlet-mapping>
-		<servlet-name>StartMsgCaptchaServlet</servlet-name>
-		<url-pattern>/StartMsgCaptchaServlet</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>VerifyGeetestServlet</servlet-name>
-		<url-pattern>/VerifyGeetestServlet</url-pattern>
-	</servlet-mapping>
-
-
-	<servlet-mapping>
-		<servlet-name>VerifyMsgServlet</servlet-name>
-		<url-pattern>/VerifyMsgServlet</url-pattern>
 	</servlet-mapping>
 
 	<welcome-file-list>
