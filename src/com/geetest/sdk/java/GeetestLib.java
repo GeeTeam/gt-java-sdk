@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class GeetestLib {
 
-	protected final String verName = "3.2.0";// SDK版本编号
+	protected final String verName = "3.3.0";// SDK版本编号
 	protected final String sdkLang = "java";// SD的语言类型
 
 	protected final String apiUrl = "http://api.geetest.com"; //极验验证API URL
