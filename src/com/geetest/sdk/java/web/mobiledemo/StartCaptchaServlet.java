@@ -1,4 +1,4 @@
-package com.geetest.sdk.java.web.demo;
+package com.geetest.sdk.java.web.mobiledemo;
 
 import java.io.IOException;
 import java.io.PrintWriter;

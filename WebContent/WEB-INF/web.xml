@@ -15,14 +15,34 @@
 		<description></description>
 		<servlet-class>com.geetest.sdk.java.web.demo.VerifyLoginServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>MobileStartCaptchaServlet</servlet-name>
+		<display-name>MobileStartCaptchaServlet</display-name>
+		<description></description>
+		<servlet-class>com.geetest.sdk.java.web.mobiledemo.StartCaptchaServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>MobileVerifyLoginServlet</servlet-name>
+		<display-name>MobileVerifyLoginServlet</display-name>
+		<description></description>
+		<servlet-class>com.geetest.sdk.java.web.mobiledemo.VerifyLoginServlet</servlet-class>
+	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>VerifyLoginServlet</servlet-name>
-		<url-pattern>/VerifyLoginServlet</url-pattern>
+		<url-pattern>/pc-geetest/validate</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>StartCaptchaServlet</servlet-name>
-		<url-pattern>/StartCaptchaServlet</url-pattern>
+		<url-pattern>/pc-geetest/register</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>MobileVerifyLoginServlet</servlet-name>
+		<url-pattern>/mobile-geetest/validate</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>MobileStartCaptchaServlet</servlet-name>
+		<url-pattern>/mobile-geetest/register</url-pattern>
 	</servlet-mapping>
 
 	<welcome-file-list>

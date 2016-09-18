@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.geetest.sdk.java.GeetestLib;
-import com.geetest.sdk.java.web.demo.GeetestConfig;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,12 +25,12 @@ public class VerifyLoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		GeetestLib gtSdk = new GeetestLib(GeetestConfig.getCaptcha_id(), GeetestConfig.getPrivate_key());
+		GeetestLib gtSdk = new GeetestLib(GeetestConfig.getGeetest_id(), GeetestConfig.getGeetest_key());
 			
 		String challenge = request.getParameter(GeetestLib.fn_geetest_challenge);
 		String validate = request.getParameter(GeetestLib.fn_geetest_validate);
 		String seccode = request.getParameter(GeetestLib.fn_geetest_seccode);
-			
+		
 		//从session中获取gt-server状态
 		int gt_server_status_code = (Integer) request.getSession().getAttribute(gtSdk.gtServerStatusSessionKey);
 		
