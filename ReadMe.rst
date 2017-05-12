@@ -67,6 +67,7 @@
 1. 将com.geetest.sdk.java这个包引入项目中
 #. 根据自身使用情况修改前端代码调用验证码,前端文档 http://www.geetest.com/install/sections/idx-client-sdk.html#web
 #. 修改后台代码，具体可以参考demo中的后台进行修改
+* 如果是web端使用，请把WebContent中的gt.js放到可以访问的地方，并将web端中引入gt.js的地方修改成存放gt.js的地址
 
 failback效果展示
 =========================
